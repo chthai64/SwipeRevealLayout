@@ -16,11 +16,11 @@ import java.util.List;
 /**
  * Created by Chau Thai on 4/12/16.
  */
-public class MyListAdapter extends ArrayAdapter<String> {
+public class ListAdapter extends ArrayAdapter<String> {
     private final LayoutInflater mInflater;
     private final ViewBinderHelper binderHelper;
 
-    public MyListAdapter(Context context, List<String> objects) {
+    public ListAdapter(Context context, List<String> objects) {
         super(context, R.layout.row_list, objects);
         mInflater = LayoutInflater.from(context);
         binderHelper = new ViewBinderHelper();
