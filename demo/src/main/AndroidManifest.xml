@@ -24,6 +24,9 @@
         <activity android:name=".ListDemoActivity"
             android:label="ListView Demo" />
 
+        <activity android:name=".GridActivity"
+            android:label="Grid Demo" />
+
     </application>
 
 </manifest>

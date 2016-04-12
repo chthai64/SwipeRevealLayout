@@ -10,4 +10,9 @@
         android:id="@+id/action_list_view"
         android:title="ListView"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_grid_view"
+        android:title="GridView"
+        app:showAsAction="never" />
 </menu>

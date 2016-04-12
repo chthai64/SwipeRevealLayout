@@ -36,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_list_view:
                 startActivity(new Intent(this, ListDemoActivity.class));
                 return true;
+
+            case R.id.action_grid_view:
+                startActivity(new Intent(this, GridActivity.class));
+                return true;
         }
 
         return false;
