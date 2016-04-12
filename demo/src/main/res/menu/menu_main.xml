@@ -5,4 +5,9 @@
         android:id="@+id/action_recycler_view"
         android:title="RecyclerView"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_list_view"
+        android:title="ListView"
+        app:showAsAction="never" />
 </menu>

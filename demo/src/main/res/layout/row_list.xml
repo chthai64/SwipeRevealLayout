@@ -2,11 +2,10 @@
 <com.chauthai.swipereveallayout.SwipeRevealLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/sliding_layout"
+    android:id="@+id/swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/darker_gray"
-    android:layout_margin="10dp"
+    android:padding="10dp"
     app:dragEdge="right"
     app:mode="same_level">
 

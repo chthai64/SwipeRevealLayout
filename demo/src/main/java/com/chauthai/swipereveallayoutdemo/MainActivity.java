@@ -30,7 +30,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_recycler_view:
-                startActivity(new Intent(this, RecyclerViewDemo.class));
+                startActivity(new Intent(this, RecyclerDemoActivity.class));
+                return true;
+
+            case R.id.action_list_view:
+                startActivity(new Intent(this, ListDemoActivity.class));
                 return true;
         }
 

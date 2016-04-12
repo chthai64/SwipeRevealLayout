@@ -1,6 +1,7 @@
 package com.chauthai.swipereveallayoutdemo;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,16 +17,15 @@ import java.util.List;
 /**
  * Created by Chau Thai on 4/8/16.
  */
-public class StringAdapter extends RecyclerView.Adapter {
+public class RecyclerAdapter extends RecyclerView.Adapter {
     private List<String> mDataSet = new ArrayList<>();
     private LayoutInflater mInflater;
-    private ViewBinderHelper binderHelper;
+    private final ViewBinderHelper binderHelper = new ViewBinderHelper();
 
 
-    public StringAdapter(Context context, List<String> dataSet) {
+    public RecyclerAdapter(Context context, List<String> dataSet) {
         mDataSet = dataSet;
         mInflater = LayoutInflater.from(context);
-        binderHelper = new ViewBinderHelper();
     }
 
     @Override
@@ -42,6 +42,7 @@ public class StringAdapter extends RecyclerView.Adapter {
             final String data = mDataSet.get(position);
 
             // Use ViewBindHelper to restore and save the open/close state of the SwipeRevealView
+            // put an unique string id as value, can be any string which uniquely define the data
             binderHelper.bind(holder.slideLayout, data);
 
             // Bind your data here
@@ -56,6 +57,22 @@ public class StringAdapter extends RecyclerView.Adapter {
         return mDataSet.size();
     }
 
+    /**
+     * Only if you need to restore open/close state when the orientation is changed.
+     * Call this method in {@link android.app.Activity#onSaveInstanceState(Bundle)}
+     */
+    public void saveStates(Bundle outState) {
+        binderHelper.saveStates(outState);
+    }
+
+    /**
+     * Only if you need to restore open/close state when the orientation is changed.
+     * Call this method in {@link android.app.Activity#onRestoreInstanceState(Bundle)}
+     */
+    public void restoreStates(Bundle inState) {
+        binderHelper.restoreStates(inState);
+    }
+
     private class ViewHolder extends RecyclerView.ViewHolder {
         private SwipeRevealLayout slideLayout;
         private View deleteLayout;
@@ -63,7 +80,7 @@ public class StringAdapter extends RecyclerView.Adapter {
 
         public ViewHolder(View itemView) {
             super(itemView);
-            slideLayout = (SwipeRevealLayout) itemView.findViewById(R.id.sliding_layout);
+            slideLayout = (SwipeRevealLayout) itemView.findViewById(R.id.swipe_layout);
             deleteLayout = itemView.findViewById(R.id.delete_layout);
             textView = (TextView) itemView.findViewById(R.id.text);
         }
