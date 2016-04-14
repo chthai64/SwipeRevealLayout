@@ -43,7 +43,7 @@ import java.util.Set;
  */
 public class ViewBinderHelper {
     private static final String BUNDLE_MAP_KEY = "ViewBinderHelper_Bundle_Map_Key";
-    private HashMap<String, Integer> mapStates = new HashMap<>();
+    private Map<String, Integer> mapStates = new HashMap<>();
 
     /**
      * Help to save and restore open/close state of the swipeLayout. Call this method
