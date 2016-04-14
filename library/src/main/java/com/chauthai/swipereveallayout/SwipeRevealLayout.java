@@ -15,13 +15,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Created by Chau Thai on 3/16/16.
- */
 @SuppressLint("RtlHardcoded")
 public class SwipeRevealLayout extends ViewGroup {
-    private static final String TAG = "yolo";
-
     // These states are used only for ViewBindHelper
     protected static final int STATE_CLOSE     = 0;
     protected static final int STATE_CLOSING   = 1;
@@ -29,40 +24,69 @@ public class SwipeRevealLayout extends ViewGroup {
     protected static final int STATE_OPENING   = 3;
     protected static final int STATE_DRAGGING  = 4;
 
-    public static final int MODE_NORMAL     = 0;
+    private static final int DEFAULT_MIN_FLING_VELOCITY = 300; // dp per second
+
+    public static final int DRAG_EDGE_LEFT =   0x1;
+    public static final int DRAG_EDGE_RIGHT =  0x1 << 1;
+    public static final int DRAG_EDGE_TOP =    0x1 << 2;
+    public static final int DRAG_EDGE_BOTTOM = 0x1 << 3;
+
+    /**
+     * The secondary view will be under the main view.
+     */
+    public static final int MODE_NORMAL = 0;
+
+    /**
+     * The secondary view will stick the edge of the main view.
+     */
     public static final int MODE_SAME_LEVEL = 1;
 
-    private static final int DEFAULT_FLING_VELOCITY = 300; // dp per second
-
-    private static final int DRAG_EDGE_LEFT =   0x1;
-    private static final int DRAG_EDGE_RIGHT =  0x1 << 1;
-    private static final int DRAG_EDGE_TOP =    0x1 << 2;
-    private static final int DRAG_EDGE_BOTTOM = 0x1 << 3;
-
-    private int mDragEdge = DRAG_EDGE_LEFT;
-
+    /**
+     * Main view is the view which is shown when the layout is closed.
+     */
     private View mMainView;
+
+    /**
+     * Secondary view is the view which is shown when the layout is opened.
+     */
     private View mSecondaryView;
+
+    /**
+     * The rectangle position of the main view when the layout is closed.
+     */
+    private Rect mRectMainClose = new Rect();
+
+    /**
+     * The rectangle position of the main view when the layout is opened.
+     */
+    private Rect mRectMainOpen  = new Rect();
+
+    /**
+     * The rectangle position of the secondary view when the layout is closed.
+     */
+    private Rect mRectSecClose  = new Rect();
+
+    /**
+     * The rectangle position of the secondary view when the layout is opened.
+     */
+    private Rect mRectSecOpen   = new Rect();
+
+    private boolean mIsOpenBeforeInit = false;
+    private volatile boolean mAborted = false;
+    private volatile boolean mIsScrolling = false;
+    private volatile boolean mLockDrag = false;
+
+    private int mMinFlingVelocity = DEFAULT_MIN_FLING_VELOCITY;
+    private int mState = STATE_CLOSE;
+    private int mMode = MODE_NORMAL;
 
     private int mLastMainLeft = 0;
     private int mLastMainTop  = 0;
 
-    private Rect mRectMainClose = new Rect();
-    private Rect mRectMainOpen  = new Rect();
-    private Rect mRectSecClose  = new Rect();
-    private Rect mRectSecOpen   = new Rect();
+    private int mDragEdge = DRAG_EDGE_LEFT;
 
     private ViewDragHelper mDragHelper;
     private GestureDetectorCompat mGestureDetector;
-
-    private boolean mIsOpenBeforeInit = false;
-    private volatile boolean mAborted = false;
-
-    private volatile boolean mIsScrolling = false;
-    private volatile boolean mLockDrag = false;
-    private int mFlingVelocity = DEFAULT_FLING_VELOCITY;
-    private int mState = STATE_CLOSE;
-    private int mMode = MODE_NORMAL;
 
     private DragStateChangeListener mDragStateChangeListener; // only used for ViewBindHelper
     private SwipeListener mSwipeListener;
@@ -71,6 +95,9 @@ public class SwipeRevealLayout extends ViewGroup {
         void onDragStateChanged(int state);
     }
 
+    /**
+     * Listener for monitoring events about swipe layout.
+     */
     public interface SwipeListener {
         /**
          * Called when the main view becomes completely closed.
@@ -87,6 +114,21 @@ public class SwipeRevealLayout extends ViewGroup {
          * @param slideOffset The new offset of the main view within its range, from 0-1
          */
         void onSlide(SwipeRevealLayout view, float slideOffset);
+    }
+
+    /**
+     * No-op stub for {@link SwipeListener}. If you only want ot implement a subset
+     * of the listener methods, you can extend this instead of implement the full interface.
+     */
+    public static class SimpleSwipeListener implements SwipeListener {
+        @Override
+        public void onClosed(SwipeRevealLayout view) {}
+
+        @Override
+        public void onOpened(SwipeRevealLayout view) {}
+
+        @Override
+        public void onSlide(SwipeRevealLayout view, float slideOffset) {}
     }
 
     public SwipeRevealLayout(Context context) {
@@ -375,20 +417,66 @@ public class SwipeRevealLayout extends ViewGroup {
         ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
     }
 
-    public void setFlingVelocity(int velocity) {
-        mFlingVelocity = velocity;
+    /**
+     * Set the minimum fling velocity to cause the layout to open/close.
+     * @param velocity dp per second
+     */
+    public void setMinFlingVelocity(int velocity) {
+        mMinFlingVelocity = velocity;
     }
 
-    public int getFlingVelocity() {
-        return mFlingVelocity;
+    /**
+     * Get the minimum fling velocity to cause the layout to open/close.
+     * @return dp per second
+     */
+    public int getMinFlingVelocity() {
+        return mMinFlingVelocity;
     }
 
+    /**
+     * Set the edge where the layout can be dragged from.
+     * @param dragEdge Can be of these
+     *                 <ul>
+     *                      <li>{@link #DRAG_EDGE_LEFT}</li>
+     *                      <li>{@link #DRAG_EDGE_TOP}</li>
+     *                      <li>{@link #DRAG_EDGE_RIGHT}</li>
+     *                      <li>{@link #DRAG_EDGE_BOTTOM}</li>
+     *                 </ul>
+     */
     public void setDragEdge(int dragEdge) {
         mDragEdge = dragEdge;
     }
 
+    /**
+     * Get the edge where the layout can be dragged from.
+     * @return Can be of these
+     *                 <ul>
+     *                      <li>{@link #DRAG_EDGE_LEFT}</li>
+     *                      <li>{@link #DRAG_EDGE_TOP}</li>
+     *                      <li>{@link #DRAG_EDGE_RIGHT}</li>
+     *                      <li>{@link #DRAG_EDGE_BOTTOM}</li>
+     *                 </ul>
+     */
     public int getDragEdge() {
         return mDragEdge;
+    }
+
+    public void setSwipeListener(SwipeListener listener) {
+        mSwipeListener = listener;
+    }
+
+    /**
+     * @param lock if set to true, the user cannot drag/swipe the layout.
+     */
+    public void setLockDrag(boolean lock) {
+        mLockDrag = lock;
+    }
+
+    /**
+     * @return true if the drag/swipe motion is currently locked.
+     */
+    public boolean isDragLocked() {
+        return mLockDrag;
     }
 
     /** Only used for {@link ViewBinderHelper} */
@@ -396,19 +484,7 @@ public class SwipeRevealLayout extends ViewGroup {
         mDragStateChangeListener = listener;
     }
 
-    public void setSwipeListener(SwipeListener listener) {
-        mSwipeListener = listener;
-    }
-
-    public void setLockDrag(boolean lock) {
-        mLockDrag = lock;
-    }
-
-    public boolean isDragLocked() {
-        return mLockDrag;
-    }
-
-    /** Abort current motion in progress */
+    /** Abort current motion in progress. Only used for {@link ViewBinderHelper} */
     protected void abort() {
         mAborted = true;
         mDragHelper.abort();
@@ -520,7 +596,7 @@ public class SwipeRevealLayout extends ViewGroup {
             );
 
             mDragEdge = a.getInteger(R.styleable.SwipeRevealLayout_dragEdge, DRAG_EDGE_LEFT);
-            mFlingVelocity = a.getInteger(R.styleable.SwipeRevealLayout_flingVelocity, DEFAULT_FLING_VELOCITY);
+            mMinFlingVelocity = a.getInteger(R.styleable.SwipeRevealLayout_flingVelocity, DEFAULT_MIN_FLING_VELOCITY);
             mMode = a.getInteger(R.styleable.SwipeRevealLayout_mode, MODE_NORMAL);
         }
 
@@ -625,10 +701,10 @@ public class SwipeRevealLayout extends ViewGroup {
 
         @Override
         public void onViewReleased(View releasedChild, float xvel, float yvel) {
-            final boolean velRightExceeded =  pxToDp((int) xvel) >= mFlingVelocity;
-            final boolean velLeftExceeded =   pxToDp((int) xvel) <= -mFlingVelocity;
-            final boolean velUpExceeded =     pxToDp((int) yvel) <= -mFlingVelocity;
-            final boolean velDownExceeded =   pxToDp((int) yvel) >= mFlingVelocity;
+            final boolean velRightExceeded =  pxToDp((int) xvel) >= mMinFlingVelocity;
+            final boolean velLeftExceeded =   pxToDp((int) xvel) <= -mMinFlingVelocity;
+            final boolean velUpExceeded =     pxToDp((int) yvel) <= -mMinFlingVelocity;
+            final boolean velDownExceeded =   pxToDp((int) yvel) >= mMinFlingVelocity;
 
             final int pivotHorizontal = getHalfwayPivotHorizontal();
             final int pivotVertical = getHalfwayPivotVertical();
