@@ -7,7 +7,16 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by Chau Thai on 4/11/16.
+ * ViewBinderHelper provides a quick and easy solution to restore the open/close state
+ * of the items in RecyclerView, ListView, GridView or any view that requires its child view
+ * to bind the view to a data object.
+ *
+ * <p>When you bind you data object to a view, use {@link #bind(SwipeRevealLayout, String)} to
+ * save and restore the open/close state of the view.</p>
+ *
+ * <p>Optionally, if you also want to save and restore the open/close state when the device's
+ * orientation is changed, call {@link #saveStates(Bundle)} in {@link android.app.Activity#onSaveInstanceState(Bundle)}
+ * and {@link #restoreStates(Bundle)} in {@link android.app.Activity#onRestoreInstanceState(Bundle)}</p>
  */
 public class ViewBinderHelper {
     private static final String BUNDLE_MAP_KEY = "ViewBinderHelper_Bundle_Map_Key";
