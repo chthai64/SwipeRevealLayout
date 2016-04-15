@@ -44,12 +44,12 @@ dependencies {
         app:mode="same_level"
         app:dragEdge="left">
 
-        <!-- Your main layout here -->
+        <!-- Your secondary layout here -->
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
 
-        <!-- Your secondary layout here -->
+        <!-- Your main layout here -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
