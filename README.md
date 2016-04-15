@@ -7,6 +7,7 @@ A layout that you can swipe/slide to show another layout.
 * Two drag modes:
   * Normal (the secondary view is underneath the main view).
   * Same level (the secondary view sticks to the edge of the main view).
+* Minimum api level 4.
 
 ### Demo
 ##### Overview
