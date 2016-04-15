@@ -54,7 +54,7 @@ dependencies {
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
             
-    </com.chauthai.swipereveallayout.SwipeRevealLayout>
+</com.chauthai.swipereveallayout.SwipeRevealLayout>
 ```
 ```app:mode``` can be ```normal``` or ```same_level```
 
