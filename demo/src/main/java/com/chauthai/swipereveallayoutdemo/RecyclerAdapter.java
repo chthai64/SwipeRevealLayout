@@ -43,7 +43,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
 
             // Use ViewBindHelper to restore and save the open/close state of the SwipeRevealView
             // put an unique string id as value, can be any string which uniquely define the data
-            binderHelper.bind(holder.slideLayout, data);
+            binderHelper.bind(holder.swipeLayout, data);
 
             // Bind your data here
             holder.bind(data);
@@ -74,13 +74,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder {
-        private SwipeRevealLayout slideLayout;
+        private SwipeRevealLayout swipeLayout;
         private View deleteLayout;
         private TextView textView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            slideLayout = (SwipeRevealLayout) itemView.findViewById(R.id.swipe_layout);
+            swipeLayout = (SwipeRevealLayout) itemView.findViewById(R.id.swipe_layout);
             deleteLayout = itemView.findViewById(R.id.delete_layout);
             textView = (TextView) itemView.findViewById(R.id.text);
         }
