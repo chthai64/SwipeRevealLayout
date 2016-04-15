@@ -459,7 +459,7 @@ public class SwipeRevealLayout extends ViewGroup {
 
     /**
      * Set the edge where the layout can be dragged from.
-     * @param dragEdge Can be of these
+     * @param dragEdge Can be one of these
      *                 <ul>
      *                      <li>{@link #DRAG_EDGE_LEFT}</li>
      *                      <li>{@link #DRAG_EDGE_TOP}</li>
@@ -473,7 +473,7 @@ public class SwipeRevealLayout extends ViewGroup {
 
     /**
      * Get the edge where the layout can be dragged from.
-     * @return Can be of these
+     * @return Can be one of these
      *                 <ul>
      *                      <li>{@link #DRAG_EDGE_LEFT}</li>
      *                      <li>{@link #DRAG_EDGE_TOP}</li>
