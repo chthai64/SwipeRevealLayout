@@ -77,7 +77,7 @@ public class Adapter extends RecyclerView.Adapter {
 ##### Optional, to restore/save the open/close state when the device's orientation is changed:
 ##### Adapter class:
 ```java
-public class Adapter extends RecyclerView.Adapter {
+public class YourAdapter extends RecyclerView.Adapter {
   ...
 
   public void saveStates(Bundle outState) {
