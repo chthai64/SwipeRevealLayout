@@ -24,14 +24,6 @@ Drag mode same_level:
 ### Usage
 #### Dependencies
 ```groovy
-repositories {
-    maven {
-        url 'https://dl.bintray.com/chthai64/maven/'
-    }
-}
-```
-
-```groovy
 dependencies {
     compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.0.0'
 }
