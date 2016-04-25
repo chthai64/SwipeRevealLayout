@@ -112,6 +112,17 @@ public class YourActivity extends Activity {
 }
 ```
 
+#### Useful Methods
+```setSwipeListener(SwipeListener swipeListener)```: set the listener for the layout. You can use the full interface ```SwipeListener``` or a simplified listener class ```SimpleSwipeListener```
+
+```open(boolean animation)```, ```close(boolean animation)```: open/close the layout. If ```animation``` is to false, the listener will not be called.
+
+```setMinFlingVelocity(int velocity)```: set the minimum fling velocity (dp/sec) to cause the layout to open/close.
+
+```setDragEdge(int edge)```: Change the edge where the layout can be dragged from.
+
+```setLockDrag(boolean lock)```: If set to true, the user cannot drag/swipe the layout.
+
 ### License
 ```
  The MIT License (MIT)
