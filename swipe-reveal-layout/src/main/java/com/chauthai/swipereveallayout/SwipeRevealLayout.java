@@ -503,6 +503,13 @@ public class SwipeRevealLayout extends ViewGroup {
         return mLockDrag;
     }
 
+    /**
+     * @return true if the state is opened, false otherwise.
+     */
+    public boolean isOpened() {
+        return (mState == STATE_OPEN);
+    }
+
     /** Only used for {@link ViewBinderHelper} */
     void setDragStateChangeListener(DragStateChangeListener listener) {
         mDragStateChangeListener = listener;
