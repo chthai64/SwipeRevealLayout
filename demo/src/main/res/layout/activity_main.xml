@@ -190,43 +190,4 @@
                 android:layout_gravity="center"/>
         </FrameLayout>
     </com.chauthai.swipereveallayout.SwipeRevealLayout>
-
-    <com.chauthai.swipereveallayout.SwipeRevealLayout
-        android:id="@+id/swipe_layout_5"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_margin="10dp"
-        android:background="@android:color/darker_gray"
-        app:mode="normal"
-        app:dragEdge="left">
-
-        <FrameLayout
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:background="#ff8800"
-            android:onClick="starStateOnClick">
-
-            <RadioButton
-                android:id="@+id/icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:button="@drawable/btn_state_star"
-                android:clickable="false"/>
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/border_solid_white"
-            android:onClick="layoutFiveOnClick">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Click me!"
-                android:gravity="center"
-                android:layout_gravity="center"/>
-        </FrameLayout>
-    </com.chauthai.swipereveallayout.SwipeRevealLayout>
 </LinearLayout>

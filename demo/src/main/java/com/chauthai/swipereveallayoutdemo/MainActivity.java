@@ -7,10 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.chauthai.swipereveallayout.SwipeRevealLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,15 +62,6 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this, "Layout 4 clicked", Toast.LENGTH_SHORT).show();
     }
 
-    public void layoutFiveOnClick(View v) {
-        final SwipeRevealLayout swipeRevealLayout = (SwipeRevealLayout) v.getParent();
-        if (swipeRevealLayout.isOpened()) {
-            swipeRevealLayout.close(true);
-        } else {
-            swipeRevealLayout.open(true);
-        }
-    }
-
     public void moreOnClick(View v) {
         Toast.makeText(MainActivity.this, "More clicked", Toast.LENGTH_SHORT).show();
     }
@@ -95,13 +84,5 @@ public class MainActivity extends AppCompatActivity {
 
     public void starOnClick(View v) {
         Toast.makeText(MainActivity.this, "Star clicked", Toast.LENGTH_SHORT).show();
-    }
-
-    public void starStateOnClick(View v) {
-        final RadioButton icon = (RadioButton) v.findViewById(R.id.icon);
-        icon.setChecked(!icon.isChecked());
-
-        SwipeRevealLayout swipeRevealLayout = (SwipeRevealLayout) v.getParent();
-        swipeRevealLayout.close(true);
     }
 }
