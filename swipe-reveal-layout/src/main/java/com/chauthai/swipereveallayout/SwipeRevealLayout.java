@@ -504,10 +504,17 @@ public class SwipeRevealLayout extends ViewGroup {
     }
 
     /**
-     * @return true if the state is opened, false otherwise.
+     * @return true if layout is fully opened, false otherwise.
      */
     public boolean isOpened() {
         return (mState == STATE_OPEN);
+    }
+
+    /**
+     * @return true if layout is fully closed, false otherwise.
+     */
+    public boolean isClosed() {
+        return (mState == STATE_CLOSE);
     }
 
     /** Only used for {@link ViewBinderHelper} */
