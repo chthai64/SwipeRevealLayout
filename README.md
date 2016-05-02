@@ -1,14 +1,6 @@
 ## SwipeRevealLayout
 A layout that you can swipe/slide to show another layout.
 
-### Features
-* Flexible, easy to use with RecyclerView, ListView or any view that requires view binding.
-* Four drag edges (left, right, top, bottom).
-* Two drag modes:
-  * Normal (the secondary view is underneath the main view).
-  * Same level (the secondary view sticks to the edge of the main view).
-* Minimum api level 4.
-
 ### Demo
 ##### Overview
 ![Demo all](https://raw.githubusercontent.com/chthai64/SwipeRevealLayout/master/art/demo_all.gif)
@@ -20,6 +12,14 @@ Drag mode normal:
 
 Drag mode same_level:   
 ![Demo same](https://raw.githubusercontent.com/chthai64/SwipeRevealLayout/master/art/demo_same.gif)
+
+### Features
+* Flexible, easy to use with RecyclerView, ListView or any view that requires view binding.
+* Four drag edges (left, right, top, bottom).
+* Two drag modes:
+  * Normal (the secondary view is underneath the main view).
+  * Same level (the secondary view sticks to the edge of the main view).
+* Minimum api level 4.
 
 ### Usage
 #### Dependencies
