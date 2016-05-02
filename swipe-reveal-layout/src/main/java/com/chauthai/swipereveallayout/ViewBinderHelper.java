@@ -26,7 +26,9 @@ package com.chauthai.swipereveallayout;
 
 import android.os.Bundle;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,7 +46,18 @@ import java.util.Set;
  */
 public class ViewBinderHelper {
     private static final String BUNDLE_MAP_KEY = "ViewBinderHelper_Bundle_Map_Key";
-    private Map<String, Integer> mapStates = new HashMap<>();
+    private Map<String, Integer> mapStates = Collections.synchronizedMap(new HashMap<String, Integer>());
+    private Set<SwipeRevealLayout> layoutSet = new HashSet<>();
+
+    private volatile boolean openOnlyOne = true;
+    private final Object stateChangeLock = new Object();
+
+    /**
+     * @param openOnlyOne If set to true, then only one row can be opened at a time.
+     */
+    public void setOpenOnlyOne(boolean openOnlyOne) {
+        this.openOnlyOne = openOnlyOne;
+    }
 
     /**
      * Help to save and restore open/close state of the swipeLayout. Call this method
@@ -54,12 +67,30 @@ public class ViewBinderHelper {
      * @param id a string that uniquely defines the data object of the current view.
      */
     public void bind(final SwipeRevealLayout swipeLayout, final String id) {
+        layoutSet.add(swipeLayout);
         swipeLayout.abort();
 
         swipeLayout.setDragStateChangeListener(new SwipeRevealLayout.DragStateChangeListener() {
             @Override
             public void onDragStateChanged(int state) {
-                mapStates.put(id, state);
+                synchronized (stateChangeLock) {
+                    mapStates.put(id, state);
+
+                    // close other rows if openOnlyOne is true.
+                    if (openOnlyOne && getOpenCount() > 1) {
+                        for (Map.Entry<String, Integer> entry : mapStates.entrySet()) {
+                            if (!entry.getKey().equals(id)) {
+                                entry.setValue(SwipeRevealLayout.STATE_CLOSE);
+                            }
+                        }
+
+                        for (SwipeRevealLayout layout : layoutSet) {
+                            if (layout != swipeLayout) {
+                                layout.close(true);
+                            }
+                        }
+                    }
+                }
             }
         });
 
@@ -118,5 +149,17 @@ public class ViewBinderHelper {
 
             mapStates = restoredMap;
         }
+    }
+
+    private int getOpenCount() {
+        int total = 0;
+
+        for (int state : mapStates.values()) {
+            if (state == SwipeRevealLayout.STATE_OPEN || state == SwipeRevealLayout.STATE_OPENING) {
+                total++;
+            }
+        }
+
+        return total;
     }
 }
