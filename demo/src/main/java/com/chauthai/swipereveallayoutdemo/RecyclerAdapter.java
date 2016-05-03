@@ -26,6 +26,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
     public RecyclerAdapter(Context context, List<String> dataSet) {
         mDataSet = dataSet;
         mInflater = LayoutInflater.from(context);
+
+        // uncomment if you want to open only one row at a time
+        // binderHelper.setOpenOnlyOne(true);
     }
 
     @Override
