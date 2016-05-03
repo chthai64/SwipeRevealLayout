@@ -123,6 +123,8 @@ public class YourActivity extends Activity {
 
 ```open(boolean animation)```, ```close(boolean animation)```: open/close the layout. If ```animation``` is set to false, the listener will not be called.
 
+```isOpened()```, ```isClosed()```: check if the layout is fully opened or closed.
+
 ```setMinFlingVelocity(int velocity)```: set the minimum fling velocity (dp/sec) to cause the layout to open/close.
 
 ```setDragEdge(int edge)```: Change the edge where the layout can be dragged from.
