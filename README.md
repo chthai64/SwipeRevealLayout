@@ -19,13 +19,14 @@ Drag mode same_level:
 * Two drag modes:
   * Normal (the secondary view is underneath the main view).
   * Same level (the secondary view sticks to the edge of the main view).
+* Able to open one row at a time.
 * Minimum api level 4.
 
 ### Usage
 #### Dependencies
 ```groovy
 dependencies {
-    compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.0.0'
+    compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.1.0'
 }
 ```
 
@@ -59,6 +60,11 @@ dependencies {
 public class Adapter extends RecyclerView.Adapter {
   // This object helps you save/restore the open/close state of each view
   private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
+  
+  public Adapter() {
+    // uncomment the line below if you want to open only one row at a time
+    // binderHelper.setOpenOnlyOne(true);
+  }
   
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
@@ -122,6 +128,8 @@ public class YourActivity extends Activity {
 ```setDragEdge(int edge)```: Change the edge where the layout can be dragged from.
 
 ```setLockDrag(boolean lock)```: If set to true, the user cannot drag/swipe the layout.
+
+```viewBinderHelper.setOpenOnlyOne(boolean openOnlyOne)```: If ```openOnlyOne``` is set to true, you can only open one row at a time.
 
 ### License
 ```
