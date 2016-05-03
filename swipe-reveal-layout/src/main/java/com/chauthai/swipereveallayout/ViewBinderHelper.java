@@ -49,7 +49,7 @@ public class ViewBinderHelper {
     private Map<String, Integer> mapStates = Collections.synchronizedMap(new HashMap<String, Integer>());
     private Set<SwipeRevealLayout> layoutSet = new HashSet<>();
 
-    private volatile boolean openOnlyOne = true;
+    private volatile boolean openOnlyOne = false;
     private final Object stateChangeLock = new Object();
 
     /**
@@ -73,23 +73,10 @@ public class ViewBinderHelper {
         swipeLayout.setDragStateChangeListener(new SwipeRevealLayout.DragStateChangeListener() {
             @Override
             public void onDragStateChanged(int state) {
-                synchronized (stateChangeLock) {
-                    mapStates.put(id, state);
+                mapStates.put(id, state);
 
-                    // close other rows if openOnlyOne is true.
-                    if (openOnlyOne && getOpenCount() > 1) {
-                        for (Map.Entry<String, Integer> entry : mapStates.entrySet()) {
-                            if (!entry.getKey().equals(id)) {
-                                entry.setValue(SwipeRevealLayout.STATE_CLOSE);
-                            }
-                        }
-
-                        for (SwipeRevealLayout layout : layoutSet) {
-                            if (layout != swipeLayout) {
-                                layout.close(true);
-                            }
-                        }
-                    }
+                if (openOnlyOne) {
+                    closeOthers(id, swipeLayout);
                 }
             }
         });
@@ -148,6 +135,25 @@ public class ViewBinderHelper {
             }
 
             mapStates = restoredMap;
+        }
+    }
+
+    private void closeOthers(String id, SwipeRevealLayout swipeLayout) {
+        synchronized (stateChangeLock) {
+            // close other rows if openOnlyOne is true.
+            if (getOpenCount() > 1) {
+                for (Map.Entry<String, Integer> entry : mapStates.entrySet()) {
+                    if (!entry.getKey().equals(id)) {
+                        entry.setValue(SwipeRevealLayout.STATE_CLOSE);
+                    }
+                }
+
+                for (SwipeRevealLayout layout : layoutSet) {
+                    if (layout != swipeLayout) {
+                        layout.close(true);
+                    }
+                }
+            }
         }
     }
 
