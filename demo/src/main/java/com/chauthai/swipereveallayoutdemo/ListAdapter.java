@@ -24,6 +24,9 @@ public class ListAdapter extends ArrayAdapter<String> {
         super(context, R.layout.row_list, objects);
         mInflater = LayoutInflater.from(context);
         binderHelper = new ViewBinderHelper();
+
+        // uncomment if you want to open only one row at a time
+        // binderHelper.setOpenOnlyOne(true);
     }
 
     @Override
