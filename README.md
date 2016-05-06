@@ -63,7 +63,7 @@ public class Adapter extends RecyclerView.Adapter {
   
   public Adapter() {
     // uncomment the line below if you want to open only one row at a time
-    // binderHelper.setOpenOnlyOne(true);
+    // viewBinderHelper.setOpenOnlyOne(true);
   }
   
   @Override
