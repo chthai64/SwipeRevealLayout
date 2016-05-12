@@ -26,7 +26,7 @@ Drag mode same_level:
 #### Dependencies
 ```groovy
 dependencies {
-    compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.1.0'
+    compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.2.0'
 }
 ```
 
@@ -132,6 +132,10 @@ public class YourActivity extends Activity {
 ```setLockDrag(boolean lock)```: If set to true, the user cannot drag/swipe the layout.
 
 ```viewBinderHelper.setOpenOnlyOne(boolean openOnlyOne)```: If ```openOnlyOne``` is set to true, you can only open one row at a time.
+
+```viewBinderHelper.openLayout(String id)```: Open a layout. ```id``` is the id of the data object which is bind to the layout.
+
+```viewBinderHelper.closeLayout(String id)```: Close a layout. ```id``` is the id of the data object which is bind to the layout.
 
 ### License
 ```
