@@ -28,7 +28,6 @@ import android.os.Bundle;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,18 +45,12 @@ import java.util.Set;
  */
 public class ViewBinderHelper {
     private static final String BUNDLE_MAP_KEY = "ViewBinderHelper_Bundle_Map_Key";
+
     private Map<String, Integer> mapStates = Collections.synchronizedMap(new HashMap<String, Integer>());
-    private Set<SwipeRevealLayout> layoutSet = new HashSet<>();
+    private Map<String, SwipeRevealLayout> mapLayouts = Collections.synchronizedMap(new HashMap<String, SwipeRevealLayout>());
 
     private volatile boolean openOnlyOne = false;
     private final Object stateChangeLock = new Object();
-
-    /**
-     * @param openOnlyOne If set to true, then only one row can be opened at a time.
-     */
-    public void setOpenOnlyOne(boolean openOnlyOne) {
-        this.openOnlyOne = openOnlyOne;
-    }
 
     /**
      * Help to save and restore open/close state of the swipeLayout. Call this method
@@ -67,9 +60,10 @@ public class ViewBinderHelper {
      * @param id a string that uniquely defines the data object of the current view.
      */
     public void bind(final SwipeRevealLayout swipeLayout, final String id) {
-        layoutSet.add(swipeLayout);
-        swipeLayout.abort();
+        mapLayouts.values().remove(swipeLayout);
+        mapLayouts.put(id, swipeLayout);
 
+        swipeLayout.abort();
         swipeLayout.setDragStateChangeListener(new SwipeRevealLayout.DragStateChangeListener() {
             @Override
             public void onDragStateChanged(int state) {
@@ -81,10 +75,14 @@ public class ViewBinderHelper {
             }
         });
 
+        // first time binding.
         if (!mapStates.containsKey(id)) {
             mapStates.put(id, SwipeRevealLayout.STATE_CLOSE);
             swipeLayout.close(false);
-        } else {
+        }
+
+        // not the first time, then close or open depends on the current state.
+        else {
             int state = mapStates.get(id);
 
             if (state == SwipeRevealLayout.STATE_CLOSE || state == SwipeRevealLayout.STATE_CLOSING ||
@@ -138,6 +136,51 @@ public class ViewBinderHelper {
         }
     }
 
+    /**
+     * @param openOnlyOne If set to true, then only one row can be opened at a time.
+     */
+    public void setOpenOnlyOne(boolean openOnlyOne) {
+        this.openOnlyOne = openOnlyOne;
+    }
+
+    /**
+     * Open a specific layout.
+     * @param id unique id which identifies the data object which is bind to the layout.
+     */
+    public void openLayout(final String id) {
+        synchronized (stateChangeLock) {
+            mapStates.put(id, SwipeRevealLayout.STATE_OPEN);
+
+            if (mapLayouts.containsKey(id)) {
+                final SwipeRevealLayout layout = mapLayouts.get(id);
+                layout.open(true);
+            }
+            else if (openOnlyOne) {
+                closeOthers(id, mapLayouts.get(id));
+            }
+        }
+    }
+
+    /**
+     * Close a specific layout.
+     * @param id unique id which identifies the data object which is bind to the layout.
+     */
+    public void closeLayout(final String id) {
+        synchronized (stateChangeLock) {
+            mapStates.put(id, SwipeRevealLayout.STATE_CLOSE);
+
+            if (mapLayouts.containsKey(id)) {
+                final SwipeRevealLayout layout = mapLayouts.get(id);
+                layout.close(true);
+            }
+        }
+    }
+
+    /**
+     * Close others swipe layout.
+     * @param id layout which bind with this data object id will be excluded.
+     * @param swipeLayout will be excluded.
+     */
     private void closeOthers(String id, SwipeRevealLayout swipeLayout) {
         synchronized (stateChangeLock) {
             // close other rows if openOnlyOne is true.
@@ -148,7 +191,7 @@ public class ViewBinderHelper {
                     }
                 }
 
-                for (SwipeRevealLayout layout : layoutSet) {
+                for (SwipeRevealLayout layout : mapLayouts.values()) {
                     if (layout != swipeLayout) {
                         layout.close(true);
                     }
