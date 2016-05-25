@@ -34,6 +34,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -205,6 +206,7 @@ public class SwipeRevealLayout extends ViewGroup {
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         mAborted = false;
@@ -220,32 +222,57 @@ public class SwipeRevealLayout extends ViewGroup {
             final int minTop = getPaddingTop();
             final int maxBottom = Math.max(b - getPaddingBottom() - t, 0);
 
+            int measuredChildHeight = child.getMeasuredHeight();
+            int measuredChildWidth = child.getMeasuredWidth();
+
+            // need to take account if child size is match_parent
+            final LayoutParams childParams = child.getLayoutParams();
+            boolean matchParentHeight = false;
+            boolean matchParentWidth = false;
+
+            if (childParams != null) {
+                matchParentHeight = (childParams.height == LayoutParams.MATCH_PARENT) ||
+                        (childParams.height == LayoutParams.FILL_PARENT);
+                matchParentWidth = (childParams.width == LayoutParams.MATCH_PARENT) ||
+                        (childParams.width == LayoutParams.FILL_PARENT);
+            }
+
+            if (matchParentHeight) {
+                measuredChildHeight = maxBottom - minTop;
+                childParams.height = measuredChildHeight;
+            }
+
+            if (matchParentWidth) {
+                measuredChildWidth = maxRight - minLeft;
+                childParams.width = measuredChildWidth;
+            }
+
             switch (mDragEdge) {
                 case DRAG_EDGE_RIGHT:
-                    left    = Math.max(r - child.getMeasuredWidth() - getPaddingRight() - l, minLeft);
+                    left    = Math.max(r - measuredChildWidth - getPaddingRight() - l, minLeft);
                     top     = Math.min(getPaddingTop(), maxBottom);
                     right   = Math.max(r - getPaddingRight() - l, minLeft);
-                    bottom  = Math.min(child.getMeasuredHeight() + getPaddingTop(), maxBottom);
+                    bottom  = Math.min(measuredChildHeight + getPaddingTop(), maxBottom);
                     break;
 
                 case DRAG_EDGE_LEFT:
                     left    = Math.min(getPaddingLeft(), maxRight);
                     top     = Math.min(getPaddingTop(), maxBottom);
-                    right   = Math.min(child.getMeasuredWidth() + getPaddingLeft(), maxRight);
-                    bottom  = Math.min(child.getMeasuredHeight() + getPaddingTop(), maxBottom);
+                    right   = Math.min(measuredChildWidth + getPaddingLeft(), maxRight);
+                    bottom  = Math.min(measuredChildHeight + getPaddingTop(), maxBottom);
                     break;
 
                 case DRAG_EDGE_TOP:
                     left    = Math.min(getPaddingLeft(), maxRight);
                     top     = Math.min(getPaddingTop(), maxBottom);
-                    right   = Math.min(child.getMeasuredWidth() + getPaddingLeft(), maxRight);
-                    bottom  = Math.min(child.getMeasuredHeight() + getPaddingTop(), maxBottom);
+                    right   = Math.min(measuredChildWidth + getPaddingLeft(), maxRight);
+                    bottom  = Math.min(measuredChildHeight + getPaddingTop(), maxBottom);
                     break;
 
                 case DRAG_EDGE_BOTTOM:
                     left    = Math.min(getPaddingLeft(), maxRight);
-                    top     = Math.max(b - child.getMeasuredHeight() - getPaddingBottom() - t, minTop);
-                    right   = Math.min(child.getMeasuredWidth() + getPaddingLeft(), maxRight);
+                    top     = Math.max(b - measuredChildHeight - getPaddingBottom() - t, minTop);
+                    right   = Math.min(measuredChildWidth + getPaddingLeft(), maxRight);
                     bottom  = Math.max(b - getPaddingBottom() - t, minTop);
                     break;
             }
