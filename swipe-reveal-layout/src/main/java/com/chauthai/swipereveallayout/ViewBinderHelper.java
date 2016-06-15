@@ -60,6 +60,10 @@ public class ViewBinderHelper {
      * @param id a string that uniquely defines the data object of the current view.
      */
     public void bind(final SwipeRevealLayout swipeLayout, final String id) {
+        if (swipeLayout.shouldRequestLayout()) {
+            swipeLayout.requestLayout();
+        }
+
         mapLayouts.values().remove(swipeLayout);
         mapLayouts.put(id, swipeLayout);
 

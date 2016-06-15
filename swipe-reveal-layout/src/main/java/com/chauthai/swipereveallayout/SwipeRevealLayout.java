@@ -39,6 +39,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 @SuppressLint("RtlHardcoded")
 public class SwipeRevealLayout extends ViewGroup {
@@ -115,6 +116,8 @@ public class SwipeRevealLayout extends ViewGroup {
 
     private DragStateChangeListener mDragStateChangeListener; // only used for ViewBindHelper
     private SwipeListener mSwipeListener;
+
+    private int mOnLayoutCount = 0;
 
     interface DragStateChangeListener {
         void onDragStateChanged(int state);
@@ -310,6 +313,8 @@ public class SwipeRevealLayout extends ViewGroup {
 
         mLastMainLeft = mMainView.getLeft();
         mLastMainTop = mMainView.getTop();
+
+        mOnLayoutCount++;
     }
 
     /**
@@ -553,6 +558,15 @@ public class SwipeRevealLayout extends ViewGroup {
     protected void abort() {
         mAborted = true;
         mDragHelper.abort();
+    }
+
+    /**
+     * In RecyclerView/ListView, onLayout should be called 2 times to display children views correctly.
+     * This method check if it've already called onLayout two times.
+     * @return true if you should call {@link #requestLayout()}.
+     */
+    protected boolean shouldRequestLayout() {
+        return mOnLayoutCount < 2;
     }
 
 
