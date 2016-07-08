@@ -26,7 +26,7 @@ Drag mode same_level:
 #### Dependencies
 ```groovy
 dependencies {
-    compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.2.2'
+    compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.3.0'
 }
 ```
 
@@ -118,7 +118,9 @@ public class YourActivity extends Activity {
 }
 ```
 
-#### Useful Methods
+#### Useful Methods/Attributes
+```app:minDistRequestDisallowParent```: The minimum distance (dimesion) to the closest drag edge that the SwipeRevealLayout will disallow the parent to intercept touch event. It basically means the minimum distance to swipe until a RecyclerView (or something similar) cannot be scrolled.
+
 ```setSwipeListener(SwipeListener swipeListener)```: set the listener for the layout. You can use the full interface ```SwipeListener``` or a simplified listener class ```SimpleSwipeListener```
 
 ```open(boolean animation)```, ```close(boolean animation)```: open/close the layout. If ```animation``` is set to false, the listener will not be called.
