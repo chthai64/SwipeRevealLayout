@@ -15,5 +15,7 @@
         </attr>
 
         <attr name="flingVelocity" format="integer" />
+
+        <attr name="minDistRequestDisallowParent" format="dimension" />
     </declare-styleable>
 </resources>

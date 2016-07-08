@@ -51,6 +51,7 @@ public class SwipeRevealLayout extends ViewGroup {
     protected static final int STATE_DRAGGING  = 4;
 
     private static final int DEFAULT_MIN_FLING_VELOCITY = 300; // dp per second
+    private static final int DEFAULT_MIN_DIST_REQUEST_DISALLOW_PARENT = 5; // dp
 
     public static final int DRAG_EDGE_LEFT =   0x1;
     public static final int DRAG_EDGE_RIGHT =  0x1 << 1;
@@ -96,6 +97,12 @@ public class SwipeRevealLayout extends ViewGroup {
      * The rectangle position of the secondary view when the layout is opened.
      */
     private Rect mRectSecOpen   = new Rect();
+
+    /**
+     * The minimum distance (px) to the closest drag edge that the SwipeRevealLayout
+     * will disallow the parent to intercept touch event.
+     */
+    private int mMinDistRequestDisallowParent = 0;
 
     private boolean mIsOpenBeforeInit = false;
     private volatile boolean mAborted = false;
@@ -677,6 +684,11 @@ public class SwipeRevealLayout extends ViewGroup {
             mDragEdge = a.getInteger(R.styleable.SwipeRevealLayout_dragEdge, DRAG_EDGE_LEFT);
             mMinFlingVelocity = a.getInteger(R.styleable.SwipeRevealLayout_flingVelocity, DEFAULT_MIN_FLING_VELOCITY);
             mMode = a.getInteger(R.styleable.SwipeRevealLayout_mode, MODE_NORMAL);
+
+            mMinDistRequestDisallowParent = a.getDimensionPixelSize(
+                    R.styleable.SwipeRevealLayout_minDistRequestDisallowParent,
+                    dpToPx(DEFAULT_MIN_DIST_REQUEST_DISALLOW_PARENT)
+            );
         }
 
         mDragHelper = ViewDragHelper.create(this, 1.0f, mDragHelperCallback);
@@ -686,9 +698,12 @@ public class SwipeRevealLayout extends ViewGroup {
     }
 
     private final GestureDetector.OnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
+        boolean hasDisallowed = false;
+
         @Override
         public boolean onDown(MotionEvent e) {
             mIsScrolling = false;
+            hasDisallowed = false;
             return true;
         }
 
@@ -703,12 +718,63 @@ public class SwipeRevealLayout extends ViewGroup {
             mIsScrolling = true;
 
             if (getParent() != null) {
-                getParent().requestDisallowInterceptTouchEvent(true);
+                boolean shouldDisallow;
+
+                if (!hasDisallowed) {
+                    shouldDisallow = getDistToClosestEdge() >= mMinDistRequestDisallowParent;
+                    if (shouldDisallow) {
+                        hasDisallowed = true;
+                    }
+                } else {
+                    shouldDisallow = true;
+                }
+
+                // disallow parent to intercept touch event so that the layout will work
+                // properly on RecyclerView or view that handles scroll gesture.
+                getParent().requestDisallowInterceptTouchEvent(shouldDisallow);
             }
 
             return false;
         }
     };
+
+    private int getDistToClosestEdge() {
+        switch (mDragEdge) {
+            case DRAG_EDGE_LEFT:
+                final int pivotRight = mRectMainClose.left + mSecondaryView.getWidth();
+
+                return Math.min(
+                        mMainView.getLeft() - mRectMainClose.left,
+                        pivotRight - mMainView.getLeft()
+                );
+
+            case DRAG_EDGE_RIGHT:
+                final int pivotLeft = mRectMainClose.right - mSecondaryView.getWidth();
+
+                return Math.min(
+                        mMainView.getRight() - pivotLeft,
+                        mRectMainClose.right - mMainView.getRight()
+                );
+
+            case DRAG_EDGE_TOP:
+                final int pivotBottom = mRectMainClose.top + mSecondaryView.getHeight();
+
+                return Math.min(
+                        mMainView.getBottom() - pivotBottom,
+                        pivotBottom - mMainView.getTop()
+                );
+
+            case DRAG_EDGE_BOTTOM:
+                final int pivotTop = mRectMainClose.bottom - mSecondaryView.getHeight();
+
+                return Math.min(
+                        mRectMainClose.bottom - mMainView.getBottom(),
+                        mMainView.getBottom() - pivotTop
+                );
+        }
+
+        return 0;
+    }
 
     private int getHalfwayPivotHorizontal() {
         if (mDragEdge == DRAG_EDGE_LEFT) {
@@ -984,5 +1050,11 @@ public class SwipeRevealLayout extends ViewGroup {
         Resources resources = getContext().getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return (int) (px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
+    private int dpToPx(int dp) {
+        Resources resources = getContext().getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return (int) (dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 }
