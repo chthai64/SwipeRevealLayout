@@ -132,6 +132,7 @@ public class YourActivity extends Activity {
 ```setDragEdge(int edge)```: Change the edge where the layout can be dragged from.
 
 ```setLockDrag(boolean lock)```: If set to true, the user cannot drag/swipe the layout.
+
 ```viewBinderHelper.lockSwipe(String... id), viewBinderHelper.unlockSwipe(String... id)```: Lock/unlock layouts which are binded to the binderHelper.
 
 ```viewBinderHelper.setOpenOnlyOne(boolean openOnlyOne)```: If ```openOnlyOne``` is set to true, you can only open one row at a time.
