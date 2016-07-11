@@ -26,8 +26,10 @@ package com.chauthai.swipereveallayout;
 
 import android.os.Bundle;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,6 +50,7 @@ public class ViewBinderHelper {
 
     private Map<String, Integer> mapStates = Collections.synchronizedMap(new HashMap<String, Integer>());
     private Map<String, SwipeRevealLayout> mapLayouts = Collections.synchronizedMap(new HashMap<String, SwipeRevealLayout>());
+    private Set<String> lockedSwipeSet = Collections.synchronizedSet(new HashSet<String>());
 
     private volatile boolean openOnlyOne = false;
     private final Object stateChangeLock = new Object();
@@ -96,6 +99,9 @@ public class ViewBinderHelper {
                 swipeLayout.open(false);
             }
         }
+
+        // set lock swipe
+        swipeLayout.setLockDrag(lockedSwipeSet.contains(id));
     }
 
     /**
@@ -138,6 +144,22 @@ public class ViewBinderHelper {
 
             mapStates = restoredMap;
         }
+    }
+
+    /**
+     * Lock swipe for some layouts.
+     * @param id a string that uniquely defines the data object.
+     */
+    public void lockSwipe(String... id) {
+        setLockSwipe(true, id);
+    }
+
+    /**
+     * Unlock swipe for some layouts.
+     * @param id a string that uniquely defines the data object.
+     */
+    public void unlockSwipe(String... id) {
+        setLockSwipe(false, id);
     }
 
     /**
@@ -200,6 +222,23 @@ public class ViewBinderHelper {
                         layout.close(true);
                     }
                 }
+            }
+        }
+    }
+
+    private void setLockSwipe(boolean lock, String... id) {
+        if (id == null || id.length == 0)
+            return;
+
+        if (lock)
+            lockedSwipeSet.addAll(Arrays.asList(id));
+        else
+            lockedSwipeSet.removeAll(Arrays.asList(id));
+
+        for (String s : id) {
+            SwipeRevealLayout layout = mapLayouts.get(s);
+            if (layout != null) {
+                layout.setLockDrag(lock);
             }
         }
     }
