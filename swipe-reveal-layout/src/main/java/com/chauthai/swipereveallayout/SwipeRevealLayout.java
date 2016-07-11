@@ -51,7 +51,7 @@ public class SwipeRevealLayout extends ViewGroup {
     protected static final int STATE_DRAGGING  = 4;
 
     private static final int DEFAULT_MIN_FLING_VELOCITY = 300; // dp per second
-    private static final int DEFAULT_MIN_DIST_REQUEST_DISALLOW_PARENT = 5; // dp
+    private static final int DEFAULT_MIN_DIST_REQUEST_DISALLOW_PARENT = 1; // dp
 
     public static final int DRAG_EDGE_LEFT =   0x1;
     public static final int DRAG_EDGE_RIGHT =  0x1 << 1;
