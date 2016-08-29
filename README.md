@@ -20,7 +20,7 @@ Drag mode same_level:
   * Normal (the secondary view is underneath the main view).
   * Same level (the secondary view sticks to the edge of the main view).
 * Able to open one row at a time.
-* Minimum api level 4.
+* Minimum api level 9.
 
 ### Usage
 #### Dependencies
