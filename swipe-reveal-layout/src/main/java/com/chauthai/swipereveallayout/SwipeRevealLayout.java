@@ -338,11 +338,22 @@ public class SwipeRevealLayout extends ViewGroup {
         final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
-        final int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
-        final int measuredHeight = MeasureSpec.getSize(heightMeasureSpec);
-
         int desiredWidth = 0;
         int desiredHeight = 0;
+
+        // first find the largest child
+        for (int i = 0; i < getChildCount(); i++) {
+            final View child = getChildAt(i);
+            measureChild(child, widthMeasureSpec, heightMeasureSpec);
+            desiredWidth = Math.max(child.getMeasuredWidth(), desiredWidth);
+            desiredHeight = Math.max(child.getMeasuredHeight(), desiredHeight);
+        }
+        // create new measure spec using the largest child width
+        widthMeasureSpec = MeasureSpec.makeMeasureSpec(desiredWidth, widthMode);
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(desiredHeight, heightMode);
+
+        final int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
+        final int measuredHeight = MeasureSpec.getSize(heightMeasureSpec);
 
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
