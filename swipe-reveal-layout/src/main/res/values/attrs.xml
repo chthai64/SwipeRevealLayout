@@ -7,6 +7,8 @@
             <flag name="right" value="2" />
             <flag name="top" value="4" />
             <flag name="bottom" value="8" />
+            <flag name="start" value="16" />
+            <flag name="end" value="32" />
         </attr>
         
         <attr name="mode">
