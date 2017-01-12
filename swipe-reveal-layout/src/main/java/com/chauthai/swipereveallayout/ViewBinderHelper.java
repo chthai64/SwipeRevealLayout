@@ -189,15 +189,27 @@ public class ViewBinderHelper {
 
     /**
      * Close a specific layout.
+     *
      * @param id unique id which identifies the data object which is bind to the layout.
      */
     public void closeLayout(final String id) {
+        closeLayout(id, true);
+    }
+
+    /**
+     * Close a specific layout.
+     *
+     * @param id        unique id which identifies the data object which is bind to the layout.
+     * @param animation true to animate the close motion. {@link SwipeRevealLayout.SwipeListener} won't be
+     *                  called if is animation is false.
+     */
+    public void closeLayout(final String id, final boolean animation) {
         synchronized (stateChangeLock) {
             mapStates.put(id, SwipeRevealLayout.STATE_CLOSE);
 
             if (mapLayouts.containsKey(id)) {
                 final SwipeRevealLayout layout = mapLayouts.get(id);
-                layout.close(true);
+                layout.close(animation);
             }
         }
     }
