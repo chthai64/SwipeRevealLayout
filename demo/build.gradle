@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.chauthai.swipereveallayout"
+        applicationId "com.chauthai.swipereveallayout.test2"
         minSdkVersion 14
         targetSdkVersion 24
         versionCode 7

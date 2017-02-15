@@ -111,7 +111,7 @@ public class SwipeRevealLayout extends ViewGroup {
     private int mLastMainLeft = 0;
     private int mLastMainTop  = 0;
 
-    private int mDragEdge = DRAG_EDGE_NONE;
+    private int mDragEdge = DRAG_EDGE_LEFT | DRAG_EDGE_RIGHT | DRAG_EDGE_TOP;
 
     private ViewDragHelper mDragHelper;
     private GestureDetectorCompat mGestureDetector;
@@ -700,7 +700,7 @@ public class SwipeRevealLayout extends ViewGroup {
             switch (mDragEdge) {
 
                 default:
-                    return child.getTop();
+                    return top;
             }
         }
 
@@ -710,7 +710,7 @@ public class SwipeRevealLayout extends ViewGroup {
 
 
                 default:
-                    return child.getLeft();
+                    return left;
             }
         }
 
