@@ -218,8 +218,14 @@ public class SwipeRevealLayout extends ViewGroup {
                     bottom = Math.min(measuredChildHeight + getPaddingTop(), maxBottom);
                     break;
 
-                case DRAG_EDGE_NONE:
                 case DRAG_EDGE_LEFT:
+                    left = Math.min(getPaddingLeft(), maxRight);
+                    top = Math.min(getPaddingTop(), maxBottom);
+                    right = Math.min(measuredChildWidth + getPaddingLeft(), maxRight);
+                    bottom = Math.min(measuredChildHeight + getPaddingTop(), maxBottom);
+                    break;
+
+                case DRAG_EDGE_NONE:
                     left = Math.min(getPaddingLeft(), maxRight);
                     top = Math.min(getPaddingTop(), maxBottom);
                     right = Math.min(measuredChildWidth + getPaddingLeft(), maxRight);
@@ -250,6 +256,7 @@ public class SwipeRevealLayout extends ViewGroup {
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec,heightMeasureSpec);
         if (getChildCount() < 2) {
             throw new RuntimeException("Layout must have two children");
         }
@@ -265,13 +272,13 @@ public class SwipeRevealLayout extends ViewGroup {
         // first find the largest child
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
-            measureChild(child, widthMeasureSpec, heightMeasureSpec);
             desiredWidth = Math.max(child.getMeasuredWidth(), desiredWidth);
             desiredHeight = Math.max(child.getMeasuredHeight(), desiredHeight);
         }
         // create new measure spec using the largest child width
-        widthMeasureSpec = MeasureSpec.makeMeasureSpec(desiredWidth, widthMode);
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(desiredHeight, heightMode);
+        // TODO: hot fix recycler padding wrong
+        //widthMeasureSpec = MeasureSpec.makeMeasureSpec(desiredWidth, widthMode);
+        //heightMeasureSpec = MeasureSpec.makeMeasureSpec(desiredHeight, heightMode);
 
         final int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
         final int measuredHeight = MeasureSpec.getSize(heightMeasureSpec);
@@ -502,7 +509,7 @@ public class SwipeRevealLayout extends ViewGroup {
      * @return true if you should call {@link #requestLayout()}.
      */
     protected boolean shouldRequestLayout() {
-        return mOnLayoutCount < getChildCount();
+        return false;
     }
 
 
@@ -514,14 +521,6 @@ public class SwipeRevealLayout extends ViewGroup {
                 mMainView.getRight(),
                 mMainView.getBottom()
         );
-
-        // open position of the main view
-//        mRectMainOpen.set(
-//                mRectMainClose.left,
-//                mRectMainClose.top,
-//                mRectMainClose.left + mMainView.getWidth(),
-//                mRectMainClose.top + mMainView.getHeight()
-//        );
 
     }
 

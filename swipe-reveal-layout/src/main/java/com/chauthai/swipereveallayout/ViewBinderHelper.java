@@ -64,7 +64,7 @@ public class ViewBinderHelper {
      */
     public void bind(final SwipeRevealLayout swipeLayout, final String id) {
         if (swipeLayout.shouldRequestLayout()) {
-            swipeLayout.requestLayout();
+            swipeLayout.invalidate();
         }
 
         mapLayouts.values().remove(swipeLayout);
