@@ -76,11 +76,6 @@ public class RevealableViewModel {
     }
 
     private int getSecOpenLeft() {
-        //TODO: hotcode mMode
-        if (0 == MODE_NORMAL || mDragEdge == DRAG_EDGE_BOTTOM || mDragEdge == DRAG_EDGE_TOP) {
-            return mRectClose.left;
-        }
-
         if (mDragEdge == DRAG_EDGE_LEFT) {
             return mRectClose.left + view.getWidth();
         } else {
@@ -89,15 +84,6 @@ public class RevealableViewModel {
     }
 
     private int getSecOpenTop() {
-        //TODO: hotcode mMode
-        if (0 == MODE_NORMAL || mDragEdge == DRAG_EDGE_LEFT || mDragEdge == DRAG_EDGE_RIGHT) {
-            return mRectClose.top;
-        }
-
-        if (mDragEdge == DRAG_EDGE_TOP) {
-            return mRectClose.top + view.getHeight();
-        } else {
-            return mRectClose.top - view.getHeight();
-        }
+        return mRectClose.top;
     }
 }

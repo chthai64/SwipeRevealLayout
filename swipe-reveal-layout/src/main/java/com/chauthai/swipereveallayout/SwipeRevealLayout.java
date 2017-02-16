@@ -55,8 +55,8 @@ public class SwipeRevealLayout extends ViewGroup {
     public static final int DRAG_EDGE_NONE = 0;
     public static final int DRAG_EDGE_LEFT = 0x1;
     public static final int DRAG_EDGE_RIGHT = 0x1 << 1;
-    public static final int DRAG_EDGE_TOP = 0x1 << 2;
-    public static final int DRAG_EDGE_BOTTOM = 0x1 << 3;
+    //public static final int DRAG_EDGE_TOP = 0x1 << 2;
+    //public static final int DRAG_EDGE_BOTTOM = 0x1 << 3;
 
     /**
      * The secondary view will be under the main view.
@@ -114,45 +114,6 @@ public class SwipeRevealLayout extends ViewGroup {
         void onDragStateChanged(int state);
     }
 
-    /**
-     * Listener for monitoring events about swipe layout.
-     */
-    public interface SwipeListener {
-        /**
-         * Called when the main view becomes completely closed.
-         */
-        void onClosed(SwipeRevealLayout view);
-
-        /**
-         * Called when the main view becomes completely opened.
-         */
-        void onOpened(SwipeRevealLayout view);
-
-        /**
-         * Called when the main view's position changes.
-         *
-         * @param slideOffset The new offset of the main view within its range, from 0-1
-         */
-        void onSlide(SwipeRevealLayout view, float slideOffset);
-    }
-
-    /**
-     * No-op stub for {@link SwipeListener}. If you only want ot implement a subset
-     * of the listener methods, you can extend this instead of implement the full interface.
-     */
-    public static class SimpleSwipeListener implements SwipeListener {
-        @Override
-        public void onClosed(SwipeRevealLayout view) {
-        }
-
-        @Override
-        public void onOpened(SwipeRevealLayout view) {
-        }
-
-        @Override
-        public void onSlide(SwipeRevealLayout view, float slideOffset) {
-        }
-    }
 
     public SwipeRevealLayout(Context context) {
         super(context);
@@ -265,19 +226,6 @@ public class SwipeRevealLayout extends ViewGroup {
                     bottom = Math.min(measuredChildHeight + getPaddingTop(), maxBottom);
                     break;
 
-                case DRAG_EDGE_TOP:
-                    left = Math.min(getPaddingLeft(), maxRight);
-                    top = Math.min(getPaddingTop(), maxBottom);
-                    right = Math.min(measuredChildWidth + getPaddingLeft(), maxRight);
-                    bottom = Math.min(measuredChildHeight + getPaddingTop(), maxBottom);
-                    break;
-
-                case DRAG_EDGE_BOTTOM:
-                    left = Math.min(getPaddingLeft(), maxRight);
-                    top = Math.max(b - measuredChildHeight - getPaddingBottom() - t, minTop);
-                    right = Math.min(measuredChildWidth + getPaddingLeft(), maxRight);
-                    bottom = Math.max(b - getPaddingBottom() - t, minTop);
-                    break;
             }
 
             child.layout(left, top, right, bottom);
@@ -394,7 +342,6 @@ public class SwipeRevealLayout extends ViewGroup {
      *                  called if is animation is false.
      */
     public void open(boolean animation) {
-        Log.d("hydrated", "open called");
         mIsOpenBeforeInit = true;
         mAborted = false;
 
@@ -418,11 +365,6 @@ public class SwipeRevealLayout extends ViewGroup {
                     rect.bottom
             );
 
-            //TODO: later
-//            for(RevealableViewModel reveal : revealableViewMap.values()) {
-//                //reveal.layoutOpen();
-//            }
-
         }
 
         ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
@@ -435,7 +377,6 @@ public class SwipeRevealLayout extends ViewGroup {
      *                  called if is animation is false.
      */
     public void close(boolean animation) {
-        Log.d("hydrated", "close called");
         mIsOpenBeforeInit = false;
         mAborted = false;
 
@@ -457,10 +398,7 @@ public class SwipeRevealLayout extends ViewGroup {
                     mRectMainClose.right,
                     mRectMainClose.bottom
             );
-            //TODO: later
-//            for(RevealableViewModel reveal : revealableViewMap.values()) {
-//                //reveal.layoutClose();
-//            }
+
         }
 
         ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
@@ -490,9 +428,7 @@ public class SwipeRevealLayout extends ViewGroup {
      * @param dragEdge Can be one of these
      *                 <ul>
      *                 <li>{@link #DRAG_EDGE_LEFT}</li>
-     *                 <li>{@link #DRAG_EDGE_TOP}</li>
      *                 <li>{@link #DRAG_EDGE_RIGHT}</li>
-     *                 <li>{@link #DRAG_EDGE_BOTTOM}</li>
      *                 </ul>
      */
     public void setDragEdge(int dragEdge) {
@@ -505,9 +441,7 @@ public class SwipeRevealLayout extends ViewGroup {
      * @return Can be one of these
      * <ul>
      * <li>{@link #DRAG_EDGE_LEFT}</li>
-     * <li>{@link #DRAG_EDGE_TOP}</li>
      * <li>{@link #DRAG_EDGE_RIGHT}</li>
-     * <li>{@link #DRAG_EDGE_BOTTOM}</li>
      * </ul>
      */
     public int getDragEdge() {
@@ -693,7 +627,6 @@ public class SwipeRevealLayout extends ViewGroup {
 
         @Override
         public int clampViewPositionHorizontal(View child, int left, int dx) {
-            Log.d("hydrated", "current" + currentDragEdge);
             if ((mDragEdge & DRAG_EDGE_LEFT) > 0 && left > mRectMainClose.left) {
                 RevealableViewModel group = revealableViewManager.getGroupFromEdge(DRAG_EDGE_LEFT);
                 if (group != null) {
@@ -771,13 +704,8 @@ public class SwipeRevealLayout extends ViewGroup {
             boolean edgeStartRight = (mDragEdge == DRAG_EDGE_LEFT)
                     && edgeFlags == ViewDragHelper.EDGE_RIGHT;
 
-            boolean edgeStartTop = (mDragEdge == DRAG_EDGE_BOTTOM)
-                    && edgeFlags == ViewDragHelper.EDGE_TOP;
 
-            boolean edgeStartBottom = (mDragEdge == DRAG_EDGE_TOP)
-                    && edgeFlags == ViewDragHelper.EDGE_BOTTOM;
-
-            if (edgeStartLeft || edgeStartRight || edgeStartTop || edgeStartBottom) {
+            if (edgeStartLeft || edgeStartRight) {
                 mDragHelper.captureChildView(mMainView, pointerId);
             }
         }
