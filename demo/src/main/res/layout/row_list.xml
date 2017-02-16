@@ -6,11 +6,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    app:dragEdge="right"
     app:mode="same_level">
 
     <FrameLayout
         android:id="@+id/delete_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:background="#FF998822">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@android:color/holo_blue_bright"
+            android:textColor="@android:color/white"
+            android:text="Delete"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/add_layout"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
         android:background="#ffcc0000">
@@ -21,10 +35,10 @@
             android:gravity="center"
             android:background="@android:color/holo_red_dark"
             android:textColor="@android:color/white"
-            android:text="Delete"/>
+            android:text="Add"/>
     </FrameLayout>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:background="@android:color/holo_blue_light">
@@ -37,5 +51,5 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:textColor="@android:color/white"/>
-    </FrameLayout>
+    </RelativeLayout>
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

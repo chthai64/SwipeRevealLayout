@@ -1,4 +1,4 @@
-package com.chauthai.swipereveallayout.model;
+package com.chauthai.swipereveallayout;
 
 import android.graphics.Rect;
 import android.view.View;
@@ -9,7 +9,7 @@ import static com.chauthai.swipereveallayout.SwipeRevealLayout.*;
  * Created by hydra on 2017/2/15.
  */
 
-public class RevealableViewGroup {
+public class RevealableViewModel {
 
     private View view;
 
@@ -18,7 +18,7 @@ public class RevealableViewGroup {
     private Rect mRectOpen = new Rect();
     private Rect mRectClose = new Rect();
 
-    public RevealableViewGroup(View view, int edge) {
+    public RevealableViewModel(View view, int edge) {
         this.view = view;
         this.mDragEdge = edge;
 
@@ -41,6 +41,21 @@ public class RevealableViewGroup {
                 mRectOpen.right,
                 mRectOpen.bottom
         );
+    }
+
+    // getter setter
+
+    public int getDragEdge() {
+        return mDragEdge;
+    }
+
+
+    public int getWidth() {
+        return view.getWidth();
+    }
+
+    public View getView() {
+        return view;
     }
 
     private void initRect() {
