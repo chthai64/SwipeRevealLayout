@@ -99,6 +99,7 @@ public class SwipeRevealLayout extends ViewGroup {
     private int mLastMainTop = 0;
 
     private int mDragEdge = DRAG_EDGE_LEFT | DRAG_EDGE_RIGHT;
+    private int mEnableEdge = DRAG_EDGE_LEFT | DRAG_EDGE_RIGHT;
 
     private volatile int currentDragEdge = DRAG_EDGE_NONE;
 
@@ -459,6 +460,16 @@ public class SwipeRevealLayout extends ViewGroup {
         mSwipeListener = listener;
     }
 
+
+    /**
+     * Set enable to the edges dynamically. 
+     *
+     * @param edges
+     */
+    public void setEnableEdge(int edges) {
+        this.mEnableEdge = edges;
+    }
+
     /**
      * @param lock if set to true, the user cannot drag/swipe the layout.
      */
@@ -626,7 +637,7 @@ public class SwipeRevealLayout extends ViewGroup {
 
         @Override
         public int clampViewPositionHorizontal(View child, int left, int dx) {
-            if ((mDragEdge & DRAG_EDGE_LEFT) > 0 && left > mRectMainClose.left) {
+            if ((mDragEdge & DRAG_EDGE_LEFT) > 0 && left > mRectMainClose.left && (mEnableEdge & DRAG_EDGE_LEFT) > 0) {
                 RevealableViewModel group = revealableViewManager.getGroupFromEdge(DRAG_EDGE_LEFT);
                 if (group != null) {
                     currentDragEdge = DRAG_EDGE_LEFT;
@@ -637,7 +648,7 @@ public class SwipeRevealLayout extends ViewGroup {
                 }
             }
 
-            if ((mDragEdge & DRAG_EDGE_RIGHT) > 0 && left < mRectMainClose.left) {
+            if ((mDragEdge & DRAG_EDGE_RIGHT) > 0 && left < mRectMainClose.left && (mEnableEdge & DRAG_EDGE_RIGHT) > 0) {
                 RevealableViewModel group = revealableViewManager.getGroupFromEdge(DRAG_EDGE_RIGHT);
                 if (group != null) {
                     currentDragEdge = DRAG_EDGE_RIGHT;
