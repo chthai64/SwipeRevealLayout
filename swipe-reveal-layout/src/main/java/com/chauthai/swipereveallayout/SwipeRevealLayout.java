@@ -350,7 +350,7 @@ public class SwipeRevealLayout extends ViewGroup {
      *                  called if is animation is false.
      */
     public void open(boolean animation) {
-        mIsOpenBeforeInit = true;
+        //mIsOpenBeforeInit = true;
         mAborted = false;
 
         Rect rect = revealableViewManager.getMainOpenRect(mRectMainClose, currentDragEdge);
@@ -385,7 +385,7 @@ public class SwipeRevealLayout extends ViewGroup {
      *                  called if is animation is false.
      */
     public void close(boolean animation) {
-        mIsOpenBeforeInit = false;
+        //mIsOpenBeforeInit = false;
         mAborted = false;
 
         if (animation) {
@@ -462,7 +462,7 @@ public class SwipeRevealLayout extends ViewGroup {
 
 
     /**
-     * Set enable to the edges dynamically. 
+     * Set enable to the edges dynamically.
      *
      * @param edges
      */

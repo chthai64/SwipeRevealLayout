@@ -51,6 +51,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
             // Bind your data here
             holder.bind(data);
         }
+
+        if(position % 2 == 0) {
+            holder.swipeLayout.setEnableEdge(SwipeRevealLayout.DRAG_EDGE_LEFT);
+        } else {
+            holder.swipeLayout.setEnableEdge(SwipeRevealLayout.DRAG_EDGE_RIGHT);
+        }
     }
 
     @Override

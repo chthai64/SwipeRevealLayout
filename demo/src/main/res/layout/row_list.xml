@@ -12,6 +12,7 @@
         android:id="@+id/delete_layout"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
+        android:padding="10dp"
         android:background="#FF998822">
 
         <TextView
@@ -27,6 +28,7 @@
         android:id="@+id/add_layout"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
+        android:padding="10dp"
         android:background="#ffcc0000">
 
         <TextView
@@ -41,7 +43,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@android:color/holo_blue_light">
+        android:background="#88888888">
 
         <TextView
             android:id="@+id/text"
