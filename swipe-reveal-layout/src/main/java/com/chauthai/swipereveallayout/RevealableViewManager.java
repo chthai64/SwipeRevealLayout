@@ -53,6 +53,12 @@ public class RevealableViewManager {
         return mRectMainOpen;
     }
 
+    public void onViewPositionChanged(int dx) {
+        for(RevealableViewModel model : list) {
+            model.getView().offsetLeftAndRight(dx);
+        }
+    }
+
     private void generateDataSet() {
         edgeMap.clear();
         viewMap.clear();

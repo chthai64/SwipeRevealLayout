@@ -93,7 +93,7 @@ public class SwipeRevealLayout extends ViewGroup {
 
     private int mMinFlingVelocity = DEFAULT_MIN_FLING_VELOCITY;
     private int mState = STATE_CLOSE;
-    private int mMode = MODE_NORMAL;
+    private int mMode = MODE_SAME_LEVEL;
 
     private int mLastMainLeft = 0;
     private int mLastMainTop = 0;
@@ -236,7 +236,20 @@ public class SwipeRevealLayout extends ViewGroup {
             }
 
             child.layout(left, top, right, bottom);
+
+            if (mMode == MODE_SAME_LEVEL) {
+                switch (dragEdge) {
+                    case DRAG_EDGE_LEFT:
+                        group.getView().offsetLeftAndRight(-group.getWidth());
+                        break;
+
+                    case DRAG_EDGE_RIGHT:
+                        group.getView().offsetLeftAndRight(group.getWidth());
+                        break;
+                }
+            }
         }
+
 
         initRects();
 
@@ -724,9 +737,8 @@ public class SwipeRevealLayout extends ViewGroup {
         public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
             super.onViewPositionChanged(changedView, left, top, dx, dy);
             if (mMode == MODE_SAME_LEVEL) {
-                if (mDragEdge == DRAG_EDGE_LEFT || mDragEdge == DRAG_EDGE_RIGHT) {
-                    //TODO: later
-                    //mSecondaryView.offsetLeftAndRight(dx);
+                if ((mDragEdge & DRAG_EDGE_LEFT) > 0 || (mDragEdge & DRAG_EDGE_RIGHT) > 0) {
+                    revealableViewManager.onViewPositionChanged(dx);
                 } else {
                     //TODO: later
                     //mSecondaryView.offsetTopAndBottom(dy);
@@ -787,28 +799,6 @@ public class SwipeRevealLayout extends ViewGroup {
             }
         }
     };
-
-    public static String getStateString(int state) {
-        switch (state) {
-            case STATE_CLOSE:
-                return "state_close";
-
-            case STATE_CLOSING:
-                return "state_closing";
-
-            case STATE_OPEN:
-                return "state_open";
-
-            case STATE_OPENING:
-                return "state_opening";
-
-            case STATE_DRAGGING:
-                return "state_dragging";
-
-            default:
-                return "undefined";
-        }
-    }
 
     private int pxToDp(int px) {
         Resources resources = getContext().getResources();
