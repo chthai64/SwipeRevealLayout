@@ -280,40 +280,34 @@ public class SwipeRevealLayout extends ViewGroup {
         final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
+        final int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
+        final int measuredHeight = MeasureSpec.getSize(heightMeasureSpec);
+
         int desiredWidth = 0;
         int desiredHeight = 0;
 
         // first find the largest child
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
-            desiredWidth = Math.max(child.getMeasuredWidth(), desiredWidth);
-            desiredHeight = Math.max(child.getMeasuredHeight(), desiredHeight);
+            measureChild(child, widthMeasureSpec, heightMeasureSpec);
+            if(i == getChildCount() -1) {
+                desiredWidth = Math.max(child.getMeasuredWidth(), desiredWidth);
+                desiredHeight = Math.max(child.getMeasuredHeight(), desiredHeight);
+            }
         }
-        // create new measure spec using the largest child width
-        // TODO: hot fix recycler padding wrong
-        //widthMeasureSpec = MeasureSpec.makeMeasureSpec(desiredWidth, widthMode);
-        //heightMeasureSpec = MeasureSpec.makeMeasureSpec(desiredHeight, heightMode);
 
-        final int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
-        final int measuredHeight = MeasureSpec.getSize(heightMeasureSpec);
-
-        for (int i = 0; i < getChildCount(); i++) {
+        for (int i = 0; i < getChildCount() - 1; i++) {
             final View child = getChildAt(i);
             final LayoutParams childParams = child.getLayoutParams();
 
-            if (childParams != null) {
-                if (childParams.height == LayoutParams.MATCH_PARENT) {
-                    child.setMinimumHeight(measuredHeight);
-                }
+            final int newWidthMeasureSpec = MeasureSpec.makeMeasureSpec(desiredWidth, MeasureSpec.AT_MOST);
+            final int newHeightMeasureSpec = MeasureSpec.makeMeasureSpec(desiredHeight, MeasureSpec.AT_MOST);
 
-                if (childParams.width == LayoutParams.MATCH_PARENT) {
-                    child.setMinimumWidth(measuredWidth);
-                }
-            }
+            child.measure(newWidthMeasureSpec, newHeightMeasureSpec);
 
-            measureChild(child, widthMeasureSpec, heightMeasureSpec);
-            desiredWidth = Math.max(child.getMeasuredWidth(), desiredWidth);
-            desiredHeight = Math.max(child.getMeasuredHeight(), desiredHeight);
+            Log.d("hydrated", "" + child.getMeasuredWidth() + " " + getMeasuredHeight() + " ");
+            //desiredWidth = Math.max(child.getMeasuredWidth(), desiredWidth);
+            //desiredHeight = Math.max(child.getMeasuredHeight(), desiredHeight);
         }
 
         // taking accounts of padding
@@ -533,7 +527,7 @@ public class SwipeRevealLayout extends ViewGroup {
      * @return true if you should call {@link #requestLayout()}.
      */
     protected boolean shouldRequestLayout() {
-        return false;
+        return mOnLayoutCount < getChildCount();
     }
 
 
