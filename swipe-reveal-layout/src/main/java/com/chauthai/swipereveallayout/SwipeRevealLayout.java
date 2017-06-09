@@ -34,7 +34,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -620,6 +619,21 @@ public class SwipeRevealLayout extends ViewGroup {
         }
     }
 
+    private float getSlideOffset() {
+        switch (currentDragEdge) {
+            case DRAG_EDGE_LEFT:
+                return (float) (mMainView.getLeft() - mRectMainClose.left) / revealableViewManager.getGroupFromEdge
+                        (DRAG_EDGE_LEFT).getWidth();
+
+            case DRAG_EDGE_RIGHT:
+                return (float) (mRectMainClose.left - mMainView.getLeft()) / revealableViewManager.getGroupFromEdge
+                        (DRAG_EDGE_RIGHT).getWidth();
+
+            default:
+                return 0;
+        }
+    }
+
     private final ViewDragHelper.Callback mDragHelperCallback = new ViewDragHelper.Callback() {
         @Override
         public boolean tryCaptureView(View child, int pointerId) {
@@ -739,13 +753,16 @@ public class SwipeRevealLayout extends ViewGroup {
             }
 
             boolean isMoved = (mMainView.getLeft() != mLastMainLeft) || (mMainView.getTop() != mLastMainTop);
+            int currentOffSet = currentDragEdge == DRAG_EDGE_LEFT ? mMainView.getLeft() : mMainView.getRight();
             if (mSwipeListener != null && isMoved) {
                 if (mMainView.getLeft() == mRectMainClose.left && mMainView.getTop() == mRectMainClose.top) {
                     mSwipeListener.onClosed(SwipeRevealLayout.this);
-                } else if (mMainView.getLeft() == mRectMainClose.left && mMainView.getTop() == mRectMainClose.top) {
+                } else if (
+                        currentOffSet == revealableViewManager.getGroupFromEdge(currentDragEdge).getViewWidth()
+                                && mMainView.getTop() == mRectMainClose.top) {
                     mSwipeListener.onOpened(SwipeRevealLayout.this);
                 } else {
-                    mSwipeListener.onSlide(SwipeRevealLayout.this, 0);
+                    mSwipeListener.onSlide(SwipeRevealLayout.this, getSlideOffset());
                 }
             }
 

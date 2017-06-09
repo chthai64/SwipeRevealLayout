@@ -15,31 +15,26 @@ public class RevealableViewModel {
 
     private int mDragEdge;
 
-    private Rect mRectOpen = new Rect();
-    private Rect mRectClose = new Rect();
-
     public RevealableViewModel(View view, int edge) {
         this.view = view;
         this.mDragEdge = edge;
-
-        initRect();
     }
 
     public void layoutClose() {
         view.layout(
-                mRectClose.left,
-                mRectClose.top,
-                mRectClose.right,
-                mRectClose.bottom
+                getCloseRect().left,
+                getCloseRect().top,
+                getCloseRect().right,
+                getCloseRect().bottom
         );
     }
 
     public void layoutOpen() {
         view.layout(
-                mRectOpen.left,
-                mRectOpen.top,
-                mRectOpen.right,
-                mRectOpen.bottom
+                getOpenRect().left,
+                getOpenRect().top,
+                getOpenRect().right,
+                getOpenRect().bottom
         );
     }
 
@@ -49,7 +44,6 @@ public class RevealableViewModel {
         return mDragEdge;
     }
 
-
     public int getWidth() {
         return view.getWidth();
     }
@@ -58,16 +52,28 @@ public class RevealableViewModel {
         return view;
     }
 
-    private void initRect() {
+    public int getViewWidth() {
+        switch (mDragEdge) {
+            case DRAG_EDGE_LEFT:
+                return view.getRight();
+            case DRAG_EDGE_RIGHT:
+                return view.getLeft();
+        }
+        return Integer.MAX_VALUE;
+    }
 
-        mRectClose.set(
+    //dynamic generate view rect to avoid view hasn't initialized size yet.
+    private Rect getCloseRect() {
+        return new Rect(
                 view.getLeft(),
                 view.getTop(),
                 view.getRight(),
                 view.getBottom()
         );
+    }
 
-        mRectOpen.set(
+    private Rect getOpenRect() {
+        return new Rect(
                 getSecOpenLeft(),
                 getSecOpenTop(),
                 getSecOpenLeft() + view.getWidth(),
@@ -77,13 +83,13 @@ public class RevealableViewModel {
 
     private int getSecOpenLeft() {
         if (mDragEdge == DRAG_EDGE_LEFT) {
-            return mRectClose.left + view.getWidth();
+            return view.getLeft() + view.getWidth();
         } else {
-            return mRectClose.left - view.getWidth();
+            return view.getLeft() - view.getWidth();
         }
     }
 
     private int getSecOpenTop() {
-        return mRectClose.top;
+        return view.getTop();
     }
 }

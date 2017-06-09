@@ -3,11 +3,13 @@ package com.chauthai.swipereveallayoutdemo;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.chauthai.swipereveallayout.SwipeListener;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 
@@ -17,7 +19,7 @@ import java.util.List;
 /**
  * Created by Chau Thai on 4/8/16.
  */
-public class RecyclerAdapter extends RecyclerView.Adapter {
+public class RecyclerAdapter extends RecyclerView.Adapter implements SwipeListener{
     private List<String> mDataSet = new ArrayList<>();
     private LayoutInflater mInflater;
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
@@ -77,6 +79,22 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
         binderHelper.restoreStates(inState);
     }
 
+    @Override
+    public void onClosed(SwipeRevealLayout view) {
+        Log.d("SwipeDemo", "onClosed");
+    }
+
+    @Override
+    public void onOpened(SwipeRevealLayout view) {
+        Log.d("SwipeDemo", "onOpened");
+    }
+
+    @Override
+    public void onSlide(SwipeRevealLayout view, float slideOffset) {
+        Log.d("SwipeDemo", "slideOffset " + slideOffset);
+
+    }
+
     private class ViewHolder extends RecyclerView.ViewHolder {
         private SwipeRevealLayout swipeLayout;
         private View deleteLayout;
@@ -86,6 +104,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
         public ViewHolder(View itemView) {
             super(itemView);
             swipeLayout = (SwipeRevealLayout) itemView.findViewById(R.id.swipe_layout);
+            swipeLayout.setSwipeListener(RecyclerAdapter.this);
             deleteLayout = itemView.findViewById(R.id.delete_layout);
             textView = (TextView) itemView.findViewById(R.id.text);
             fake = (TextView) itemView.findViewById(R.id.fake);
