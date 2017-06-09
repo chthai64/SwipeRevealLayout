@@ -6,52 +6,67 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    app:mode="same_level">
+    app:mode="normal">
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/delete_layout"
         android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:padding="10dp"
-        android:background="#FF998822">
+        android:layout_height="match_parent"
+        android:background="#FF998822"
+        >
 
         <TextView
             android:layout_width="80dp"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:background="@android:color/holo_blue_bright"
-            android:textColor="@android:color/white"
-            android:text="Delete"/>
-    </FrameLayout>
+            android:gravity="center"
+            android:text="Delete"
+            android:textColor="@android:color/white"/>
+    </RelativeLayout>
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/add_layout"
         android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:padding="10dp"
-        android:background="#ffcc0000">
+        android:layout_height="match_parent"
+        android:background="#ffcc0000"
+        >
 
         <TextView
             android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_centerInParent="true"
             android:background="@android:color/holo_red_dark"
-            android:textColor="@android:color/white"
-            android:text="Add"/>
-    </FrameLayout>
+            android:gravity="center"
+            android:text="Add"
+            android:textColor="@android:color/white"/>
+    </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:background="#88888888">
 
         <TextView
             android:id="@+id/text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:gravity="center"
+            android:layout_height="30dp"
             android:layout_gravity="center"
-            android:textColor="@android:color/white"/>
-    </RelativeLayout>
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/fake"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:text="hahaha"
+            android:textSize="18sp"
+            />
+    </LinearLayout>
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

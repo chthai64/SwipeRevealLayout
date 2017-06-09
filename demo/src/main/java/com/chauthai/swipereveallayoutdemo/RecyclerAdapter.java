@@ -49,14 +49,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
             binderHelper.bind(holder.swipeLayout, data);
 
             // Bind your data here
-            holder.bind(data);
+            holder.bind(data, position);
         }
 
-        if(position % 2 == 0) {
-            holder.swipeLayout.setEnableEdge(SwipeRevealLayout.DRAG_EDGE_LEFT);
-        } else {
-            holder.swipeLayout.setEnableEdge(SwipeRevealLayout.DRAG_EDGE_RIGHT);
-        }
     }
 
     @Override
@@ -86,15 +81,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
         private SwipeRevealLayout swipeLayout;
         private View deleteLayout;
         private TextView textView;
+        private TextView fake;
 
         public ViewHolder(View itemView) {
             super(itemView);
             swipeLayout = (SwipeRevealLayout) itemView.findViewById(R.id.swipe_layout);
             deleteLayout = itemView.findViewById(R.id.delete_layout);
             textView = (TextView) itemView.findViewById(R.id.text);
+            fake = (TextView) itemView.findViewById(R.id.fake);
         }
 
-        public void bind(String data) {
+        public void bind(String data, int position) {
             deleteLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -104,6 +101,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
             });
 
             textView.setText(data);
+            fake.setVisibility((position % 2) == 0 ? View.VISIBLE : View.GONE);
         }
     }
 }

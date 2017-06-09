@@ -305,7 +305,6 @@ public class SwipeRevealLayout extends ViewGroup {
 
             child.measure(newWidthMeasureSpec, newHeightMeasureSpec);
 
-            Log.d("hydrated", "" + child.getMeasuredWidth() + " " + getMeasuredHeight() + " ");
             //desiredWidth = Math.max(child.getMeasuredWidth(), desiredWidth);
             //desiredHeight = Math.max(child.getMeasuredHeight(), desiredHeight);
         }
