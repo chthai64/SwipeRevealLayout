@@ -52,17 +52,8 @@ public class RevealableViewModel {
         return view;
     }
 
-    public int getViewWidth() {
-        switch (mDragEdge) {
-            case DRAG_EDGE_LEFT:
-                return view.getRight();
-            case DRAG_EDGE_RIGHT:
-                return view.getLeft();
-        }
-        return Integer.MAX_VALUE;
-    }
-
     //dynamic generate view rect to avoid view hasn't initialized size yet.
+    // TODO: still buggy in MODE_SAME_LEVEL since it moves.
     private Rect getCloseRect() {
         return new Rect(
                 view.getLeft(),

@@ -757,9 +757,7 @@ public class SwipeRevealLayout extends ViewGroup {
             if (mSwipeListener != null && isMoved) {
                 if (mMainView.getLeft() == mRectMainClose.left && mMainView.getTop() == mRectMainClose.top) {
                     mSwipeListener.onClosed(SwipeRevealLayout.this);
-                } else if (
-                        currentOffSet == revealableViewManager.getGroupFromEdge(currentDragEdge).getViewWidth()
-                                && mMainView.getTop() == mRectMainClose.top) {
+                } else if (getSlideOffset() == 1.0f) {
                     mSwipeListener.onOpened(SwipeRevealLayout.this);
                 } else {
                     mSwipeListener.onSlide(SwipeRevealLayout.this, getSlideOffset());
