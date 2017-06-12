@@ -626,7 +626,7 @@ public class SwipeRevealLayout extends ViewGroup {
                         (DRAG_EDGE_LEFT).getWidth();
 
             case DRAG_EDGE_RIGHT:
-                return (float) (mRectMainClose.left - mMainView.getLeft()) / revealableViewManager.getGroupFromEdge
+                return (float) (mMainView.getLeft() - mRectMainClose.left) / revealableViewManager.getGroupFromEdge
                         (DRAG_EDGE_RIGHT).getWidth();
 
             default:
@@ -758,7 +758,9 @@ public class SwipeRevealLayout extends ViewGroup {
                 if (mMainView.getLeft() == mRectMainClose.left && mMainView.getTop() == mRectMainClose.top) {
                     mSwipeListener.onClosed(SwipeRevealLayout.this);
                 } else if (getSlideOffset() == 1.0f) {
-                    mSwipeListener.onOpened(SwipeRevealLayout.this);
+                    mSwipeListener.onOpened(SwipeRevealLayout.this, DRAG_EDGE_LEFT);
+                } else if (getSlideOffset() == -1.0f) {
+                    mSwipeListener.onOpened(SwipeRevealLayout.this, DRAG_EDGE_RIGHT);
                 } else {
                     mSwipeListener.onSlide(SwipeRevealLayout.this, getSlideOffset());
                 }

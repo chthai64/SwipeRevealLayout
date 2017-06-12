@@ -16,7 +16,7 @@ public interface SwipeListener {
     /**
      * Called when the main view becomes completely opened.
      */
-    void onOpened(SwipeRevealLayout view);
+    void onOpened(SwipeRevealLayout view, int dragEdge);
 
     /**
      * Called when the main view's position changes.

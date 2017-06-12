@@ -85,8 +85,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter implements SwipeListen
     }
 
     @Override
-    public void onOpened(SwipeRevealLayout view) {
-        Log.d("SwipeDemo", "onOpened");
+    public void onOpened(SwipeRevealLayout view, int dragEdge) {
+        Log.d("SwipeDemo", "onOpened" + dragEdge);
     }
 
     @Override
