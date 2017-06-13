@@ -29,6 +29,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
@@ -38,6 +40,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
 @SuppressLint("RtlHardcoded")
 public class SwipeRevealLayout extends ViewGroup {
@@ -86,6 +89,7 @@ public class SwipeRevealLayout extends ViewGroup {
     private final RevealableViewManager revealableViewManager = new RevealableViewManager();
 
     private boolean mIsOpenBeforeInit = false;
+    private boolean mGlancing = false;
     private volatile boolean mAborted = false;
     private volatile boolean mIsScrolling = false;
     private volatile boolean mLockDrag = false;
@@ -415,6 +419,24 @@ public class SwipeRevealLayout extends ViewGroup {
         }
 
         ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
+    }
+
+    /**
+     * Animation that swipe a little bit as a glance.
+     *
+     */
+
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
+    public void doCornerGlanceAnimation() {
+        mGlancing = true;
+
+        Rect rect = revealableViewManager.getMainOpenRect(mRectMainClose, (DRAG_EDGE_RIGHT | DRAG_EDGE_LEFT) &
+                ~currentDragEdge);
+
+        mDragHelper.smoothSlideViewTo(mMainView, rect.left / 2, rect.top);
+
+        ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
+
     }
 
     /**
@@ -783,6 +805,13 @@ public class SwipeRevealLayout extends ViewGroup {
                     break;
 
                 case ViewDragHelper.STATE_IDLE:
+                    if (mGlancing) {
+                        mGlancing = false;
+
+                        mDragHelper.smoothSlideViewTo(mMainView, mRectMainClose.left, mRectMainClose.top);
+                        ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
+                        break;
+                    }
 
                     // drag edge is left or right
                     if (mDragEdge == DRAG_EDGE_LEFT || mDragEdge == DRAG_EDGE_RIGHT) {
