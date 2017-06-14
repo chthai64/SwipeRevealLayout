@@ -172,6 +172,8 @@ public class SwipeRevealLayout extends ViewGroup {
     @SuppressWarnings("ConstantConditions")
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        if(mState == STATE_DRAGGING) return;
+
         mAborted = false;
 
         for (int index = 0; index < getChildCount(); index++) {
