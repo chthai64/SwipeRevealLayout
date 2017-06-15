@@ -95,6 +95,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter implements SwipeListen
 
     }
 
+    @Override
+    public void onTouchUp(boolean isUp) {
+        Log.d("SwipeDemo", "onTouchUp " + isUp);
+    }
+
     private class ViewHolder extends RecyclerView.ViewHolder {
         private SwipeRevealLayout swipeLayout;
         private View deleteLayout;

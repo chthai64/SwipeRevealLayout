@@ -119,7 +119,6 @@ public class SwipeRevealLayout extends ViewGroup {
         void onDragStateChanged(int state);
     }
 
-
     public SwipeRevealLayout(Context context) {
         super(context);
         init(context, null);
@@ -136,6 +135,14 @@ public class SwipeRevealLayout extends ViewGroup {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (mSwipeListener != null)
+                mSwipeListener.onTouchUp(false);
+        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (mSwipeListener != null)
+                mSwipeListener.onTouchUp(true);
+        }
+
         mGestureDetector.onTouchEvent(event);
         mDragHelper.processTouchEvent(event);
         return true;
