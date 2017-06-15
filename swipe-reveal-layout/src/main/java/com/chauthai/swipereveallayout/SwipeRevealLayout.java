@@ -36,6 +36,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -172,6 +173,7 @@ public class SwipeRevealLayout extends ViewGroup {
     @SuppressWarnings("ConstantConditions")
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        // TODO: workaround to avoid re-layout on dragging when subview has changed and cause parent re-layout.
         if(mState == STATE_DRAGGING) return;
 
         mAborted = false;
@@ -622,7 +624,8 @@ public class SwipeRevealLayout extends ViewGroup {
 
                 // disallow parent to intercept touch event so that the layout will work
                 // properly on RecyclerView or view that handles scroll gesture.
-                getParent().requestDisallowInterceptTouchEvent(shouldDisallow);
+                // TODO: simply intercept all event from parents now.
+                getParent().requestDisallowInterceptTouchEvent(true);
             }
 
             return false;
