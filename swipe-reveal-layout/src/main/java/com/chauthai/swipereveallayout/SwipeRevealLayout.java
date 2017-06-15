@@ -716,7 +716,7 @@ public class SwipeRevealLayout extends ViewGroup {
 
             final int pivotHorizontal = getHalfwayPivotHorizontal();
 
-            switch (currentDragEdge) {
+            switch (currentDragEdge & mEnableEdge) {
                 case DRAG_EDGE_RIGHT:
                     if (velRightExceeded) {
                         close(true);
