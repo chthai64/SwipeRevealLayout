@@ -438,11 +438,10 @@ public class SwipeRevealLayout extends ViewGroup {
      */
 
     @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
-    public void doCornerGlanceAnimation() {
+    public void doCornerGlanceAnimation(int dragEdge) {
         mGlancing = true;
 
-        Rect rect = revealableViewManager.getMainOpenRect(mRectMainClose, (DRAG_EDGE_RIGHT | DRAG_EDGE_LEFT) &
-                ~currentDragEdge);
+        Rect rect = revealableViewManager.getMainOpenRect(mRectMainClose, dragEdge);
 
         mDragHelper.smoothSlideViewTo(mMainView, rect.left / 2, rect.top);
 
