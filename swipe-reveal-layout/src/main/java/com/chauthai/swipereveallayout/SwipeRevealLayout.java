@@ -89,7 +89,6 @@ public class SwipeRevealLayout extends ViewGroup {
 
     private final RevealableViewManager revealableViewManager = new RevealableViewManager();
 
-    private boolean mIsOpenBeforeInit = false;
     private boolean mGlancing = false;
     private volatile boolean mAborted = false;
     private volatile boolean mIsScrolling = false;
@@ -150,6 +149,13 @@ public class SwipeRevealLayout extends ViewGroup {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            if (mSwipeListener != null)
+                mSwipeListener.onTouchUp(false);
+        } else if (ev.getAction() == MotionEvent.ACTION_UP) {
+            if (mSwipeListener != null)
+                mSwipeListener.onTouchUp(true);
+        }
         mDragHelper.processTouchEvent(ev);
         mGestureDetector.onTouchEvent(ev);
 
@@ -267,12 +273,6 @@ public class SwipeRevealLayout extends ViewGroup {
 
         initRects();
 
-        if (mIsOpenBeforeInit) {
-            open(false);
-        } else {
-            close(false);
-        }
-
         mLastMainLeft = mMainView.getLeft();
         mLastMainTop = mMainView.getTop();
 
@@ -370,7 +370,6 @@ public class SwipeRevealLayout extends ViewGroup {
      *                  called if is animation is false.
      */
     public void open(boolean animation) {
-        //mIsOpenBeforeInit = true;
         mAborted = false;
 
         Rect rect = revealableViewManager.getMainOpenRect(mRectMainClose, currentDragEdge);
@@ -405,7 +404,6 @@ public class SwipeRevealLayout extends ViewGroup {
      *                  called if is animation is false.
      */
     public void close(boolean animation) {
-        //mIsOpenBeforeInit = false;
         mAborted = false;
 
         if (animation) {
