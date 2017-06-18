@@ -1,3 +1,23 @@
+## This is forked branch from ![SwipeRevealLayout](https://github.com/chthai64/SwipeRevealLayout) with multiple horizontal edges supported.
+
+### Usage swipeLayout.setEnableEdges( EdgeRight | EdgeLeft)
+
+### Installation 
+Currently still using the latest commit from master.
+
+repositories {
+    maven {
+        url "https://jitpack.io"
+    }
+}
+
+compile 'com.github.hydrated:SwipeRevealLayout:c3a9ddc'
+
+
+
+
+
+
 ## SwipeRevealLayout
 A layout that you can swipe/slide to show another layout.
 
