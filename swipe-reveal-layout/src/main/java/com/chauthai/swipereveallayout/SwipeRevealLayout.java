@@ -52,6 +52,7 @@ public class SwipeRevealLayout extends ViewGroup {
     protected static final int STATE_OPENING = 3;
     protected static final int STATE_DRAGGING = 4;
 
+    private static final int DEAFULT_GLANCING_ANIMATION_PAUSE = 300;
     private static final int DEFAULT_MIN_FLING_VELOCITY = 300; // dp per second
     private static final int DEFAULT_MIN_DIST_REQUEST_DISALLOW_PARENT = 1; // dp
 
@@ -816,9 +817,13 @@ public class SwipeRevealLayout extends ViewGroup {
                 case ViewDragHelper.STATE_IDLE:
                     if (mGlancing) {
                         mGlancing = false;
-
-                        mDragHelper.smoothSlideViewTo(mMainView, mRectMainClose.left, mRectMainClose.top);
-                        ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
+                        getHandler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mDragHelper.smoothSlideViewTo(mMainView, mRectMainClose.left, mRectMainClose.top);
+                                ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
+                            }
+                        }, DEAFULT_GLANCING_ANIMATION_PAUSE);
                         break;
                     }
 
