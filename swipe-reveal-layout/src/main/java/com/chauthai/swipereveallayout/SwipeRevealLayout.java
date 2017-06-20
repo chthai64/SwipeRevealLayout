@@ -817,13 +817,15 @@ public class SwipeRevealLayout extends ViewGroup {
                 case ViewDragHelper.STATE_IDLE:
                     if (mGlancing) {
                         mGlancing = false;
-                        getHandler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                mDragHelper.smoothSlideViewTo(mMainView, mRectMainClose.left, mRectMainClose.top);
-                                ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
-                            }
-                        }, DEAFULT_GLANCING_ANIMATION_PAUSE);
+                        if(getHandler() != null) {
+                            getHandler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mDragHelper.smoothSlideViewTo(mMainView, mRectMainClose.left, mRectMainClose.top);
+                                    ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
+                                }
+                            }, DEAFULT_GLANCING_ANIMATION_PAUSE);
+                        }
                         break;
                     }
 
