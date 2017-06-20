@@ -437,12 +437,16 @@ public class SwipeRevealLayout extends ViewGroup {
      */
 
     @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
-    public void doCornerGlanceAnimation(int dragEdge) {
+    public void doCornerGlanceAnimation(int dragEdge, float percentage) {
+        if(percentage < 0 || percentage > 1) {
+            throw new IllegalArgumentException("doCornerGlanceAnimation(dragEdge, percentage). percentage should be 0<=p<=1. p:" + percentage);
+        }
+
         mGlancing = true;
 
         Rect rect = revealableViewManager.getMainOpenRect(mRectMainClose, dragEdge);
 
-        mDragHelper.smoothSlideViewTo(mMainView, rect.left / 2, rect.top);
+        mDragHelper.smoothSlideViewTo(mMainView, (int)(rect.left * percentage), rect.top);
 
         ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
 
