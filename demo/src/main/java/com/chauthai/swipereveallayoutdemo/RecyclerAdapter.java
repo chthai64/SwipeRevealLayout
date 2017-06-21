@@ -2,6 +2,7 @@ package com.chauthai.swipereveallayoutdemo;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -86,7 +87,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter implements SwipeListen
 
     @Override
     public void onOpened(SwipeRevealLayout view, int dragEdge) {
-        Log.d("SwipeDemo", "onOpened" + dragEdge);
+        final ViewHolder holder = (ViewHolder) view.getTag();
+        if (dragEdge == SwipeRevealLayout.DRAG_EDGE_LEFT)
+            holder.deleteLayout.performClick();
     }
 
     @Override
@@ -116,6 +119,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter implements SwipeListen
         }
 
         public void bind(String data, int position) {
+            swipeLayout.setTag(this);
             deleteLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
