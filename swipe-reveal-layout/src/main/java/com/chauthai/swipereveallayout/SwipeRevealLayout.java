@@ -52,6 +52,7 @@ public class SwipeRevealLayout extends ViewGroup {
     protected static final int STATE_OPENING = 3;
     protected static final int STATE_DRAGGING = 4;
 
+    private static final int DEAFULT_GLANCING_ANIMATION_PAUSE = 300;
     private static final int DEFAULT_MIN_FLING_VELOCITY = 300; // dp per second
     private static final int DEFAULT_MIN_DIST_REQUEST_DISALLOW_PARENT = 1; // dp
 
@@ -436,12 +437,16 @@ public class SwipeRevealLayout extends ViewGroup {
      */
 
     @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
-    public void doCornerGlanceAnimation(int dragEdge) {
+    public void doCornerGlanceAnimation(int dragEdge, float percentage) {
+        if(percentage < 0 || percentage > 1) {
+            throw new IllegalArgumentException("doCornerGlanceAnimation(dragEdge, percentage). percentage should be 0<=p<=1. p:" + percentage);
+        }
+
         mGlancing = true;
 
         Rect rect = revealableViewManager.getMainOpenRect(mRectMainClose, dragEdge);
 
-        mDragHelper.smoothSlideViewTo(mMainView, rect.left / 2, rect.top);
+        mDragHelper.smoothSlideViewTo(mMainView, (int)(rect.left * percentage), rect.top);
 
         ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
 
@@ -816,9 +821,15 @@ public class SwipeRevealLayout extends ViewGroup {
                 case ViewDragHelper.STATE_IDLE:
                     if (mGlancing) {
                         mGlancing = false;
-
-                        mDragHelper.smoothSlideViewTo(mMainView, mRectMainClose.left, mRectMainClose.top);
-                        ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
+                        if(getHandler() != null) {
+                            getHandler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mDragHelper.smoothSlideViewTo(mMainView, mRectMainClose.left, mRectMainClose.top);
+                                    ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
+                                }
+                            }, DEAFULT_GLANCING_ANIMATION_PAUSE);
+                        }
                         break;
                     }
 
