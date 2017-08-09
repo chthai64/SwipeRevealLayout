@@ -18,4 +18,5 @@
 
         <attr name="minDistRequestDisallowParent" format="dimension" />
     </declare-styleable>
+
 </resources>

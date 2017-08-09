@@ -47,7 +47,7 @@ public class GridActivity extends AppCompatActivity {
     }
 
     private void setupGrid() {
-        GridView gridView = (GridView) findViewById(R.id.gridview);
+        GridView gridView = (GridView) findViewById(R.id.grid_view);
         adapter = new GridAdapter(this, createList(20));
         gridView.setAdapter(adapter);
     }
