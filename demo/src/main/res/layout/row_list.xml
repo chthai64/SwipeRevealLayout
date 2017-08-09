@@ -18,8 +18,8 @@
         <TextView
             android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:background="@android:color/holo_red_dark"
+            android:gravity="center"
             android:textColor="@android:color/white"
             android:text="Delete"/>
     </FrameLayout>
