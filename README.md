@@ -17,8 +17,12 @@ compile 'com.github.hydrated:SwipeRevealLayout:c3a9ddc'
 ### Demo
 ##### Overview
 
-SwipeRevealLayout/art/demo_all.gif
+
+
+
 ![Demo all](https://raw.githubusercontent.com/hydrated/SwipeRevealLayout/master/art/ezgif-1-f6e2694ce0.gif)
+
+
 
 ```app:minDistRequestDisallowParent```: The minimum distance (in px or dp) to the closest drag edge that the SwipeRevealLayout will disallow the parent to intercept touch event. It basically means the minimum distance to swipe until a RecyclerView (or something similar) cannot be scrolled.
 
