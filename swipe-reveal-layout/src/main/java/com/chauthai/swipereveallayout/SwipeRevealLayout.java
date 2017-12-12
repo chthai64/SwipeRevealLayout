@@ -24,6 +24,8 @@
 
 package com.chauthai.swipereveallayout;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
@@ -39,6 +41,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 
 @SuppressLint("RtlHardcoded")
@@ -489,6 +492,66 @@ public class SwipeRevealLayout extends ViewGroup {
         }
 
         ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
+    }
+
+    /**
+     * Bounce the panel from right to left with percentage of the mainView, with duration and a given interpolator
+     * @param percentage of the width from the MainView Layout to make it bounce
+     * @param duration the duration of the animation (repeated 3 times)
+     * @param interpolator the interpolator to set to the bounce animation
+     */
+    public void bounceFromRight(int percentage, int duration, Interpolator interpolator) {
+        ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "x", 0, - ((Math.abs(mRectMainOpen.left) / 100) * percentage))
+                .setDuration(duration);
+        animatorBounce.setRepeatCount(3);
+        animatorBounce.setRepeatMode(ValueAnimator.REVERSE);
+        animatorBounce.setInterpolator(interpolator);
+        animatorBounce.start();
+    }
+
+    /**
+     * Bounce the panel from left to right with percentage of the mainView, with duration and a given interpolator
+     * @param percentage of the width from the MainView Layout to make it bounce
+     * @param duration the duration of the animation (repeated 3 times)
+     * @param interpolator the interpolator to set to the bounce animation
+     */
+    public void bounceFromLeft(int percentage, int duration, Interpolator interpolator) {
+        ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "x", 0, ((Math.abs(mRectMainOpen.left) / 100) * percentage))
+                .setDuration(duration);
+        animatorBounce.setRepeatCount(3);
+        animatorBounce.setRepeatMode(ValueAnimator.REVERSE);
+        animatorBounce.setInterpolator(interpolator);
+        animatorBounce.start();
+    }
+
+    /**
+     * Bounce the panel from top to bottom with percentage of the mainView, with duration and a given interpolator
+     * @param percentage of the width from the MainView Layout to make it bounce
+     * @param duration the duration of the animation (repeated 3 times)
+     * @param interpolator the interpolator to set to the bounce animation
+     */
+    public void bounceFromTop(int percentage, int duration, Interpolator interpolator) {
+        ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "y", 0, - ((Math.abs(mRectMainOpen.top) / 100) * percentage))
+                .setDuration(duration);
+        animatorBounce.setRepeatCount(3);
+        animatorBounce.setRepeatMode(ValueAnimator.REVERSE);
+        animatorBounce.setInterpolator(interpolator);
+        animatorBounce.start();
+    }
+
+    /**
+     * Bounce the panel from bottom to left with percentage of the mainView, with duration and a given interpolator
+     * @param percentage of the width from the MainView Layout to make it bounce
+     * @param duration the duration of the animation (repeated 3 times)
+     * @param interpolator the interpolator to set to the bounce animation
+     */
+    public void bounceFromBottom(int percentage, int duration, Interpolator interpolator) {
+        ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "y", 0, ((Math.abs(mRectMainOpen.bottom) / 100) * percentage))
+                .setDuration(duration);
+        animatorBounce.setRepeatCount(3);
+        animatorBounce.setRepeatMode(ValueAnimator.REVERSE);
+        animatorBounce.setInterpolator(interpolator);
+        animatorBounce.start();
     }
 
     /**
