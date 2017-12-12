@@ -501,7 +501,7 @@ public class SwipeRevealLayout extends ViewGroup {
      * @param interpolator the interpolator to set to the bounce animation
      */
     public void bounceFromRight(int percentage, int duration, Interpolator interpolator) {
-        ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "x", 0, - ((Math.abs(mRectMainOpen.left) / 100) * percentage))
+        ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "x", 0, -((Math.abs(mRectMainOpen.width()) / 100) * percentage))
                 .setDuration(duration);
         animatorBounce.setRepeatCount(3);
         animatorBounce.setRepeatMode(ValueAnimator.REVERSE);
@@ -516,7 +516,7 @@ public class SwipeRevealLayout extends ViewGroup {
      * @param interpolator the interpolator to set to the bounce animation
      */
     public void bounceFromLeft(int percentage, int duration, Interpolator interpolator) {
-        ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "x", 0, ((Math.abs(mRectMainOpen.left) / 100) * percentage))
+        ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "x", 0, ((Math.abs(mRectMainOpen.width()) / 100) * percentage))
                 .setDuration(duration);
         animatorBounce.setRepeatCount(3);
         animatorBounce.setRepeatMode(ValueAnimator.REVERSE);
@@ -531,7 +531,7 @@ public class SwipeRevealLayout extends ViewGroup {
      * @param interpolator the interpolator to set to the bounce animation
      */
     public void bounceFromTop(int percentage, int duration, Interpolator interpolator) {
-        ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "y", 0, - ((Math.abs(mRectMainOpen.top) / 100) * percentage))
+        ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "y", 0, - ((Math.abs(mRectMainOpen.height()) / 100) * percentage))
                 .setDuration(duration);
         animatorBounce.setRepeatCount(3);
         animatorBounce.setRepeatMode(ValueAnimator.REVERSE);
@@ -546,7 +546,7 @@ public class SwipeRevealLayout extends ViewGroup {
      * @param interpolator the interpolator to set to the bounce animation
      */
     public void bounceFromBottom(int percentage, int duration, Interpolator interpolator) {
-        ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "y", 0, ((Math.abs(mRectMainOpen.bottom) / 100) * percentage))
+        ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "y", 0, ((Math.abs(mRectMainOpen.height()) / 100) * percentage))
                 .setDuration(duration);
         animatorBounce.setRepeatCount(3);
         animatorBounce.setRepeatMode(ValueAnimator.REVERSE);
