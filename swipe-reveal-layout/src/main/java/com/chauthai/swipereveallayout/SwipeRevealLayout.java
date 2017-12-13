@@ -500,7 +500,7 @@ public class SwipeRevealLayout extends ViewGroup {
      * @param duration the duration of the animation (repeated 3 times)
      * @param interpolator the interpolator to set to the bounce animation
      */
-    public void bounceFromRight(int percentage, int duration, Interpolator interpolator) {
+    private void bounceFromRight(int percentage, int duration, Interpolator interpolator) {
         ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "x", 0, -((Math.abs(mRectMainOpen.width()) / 100) * percentage))
                 .setDuration(duration);
         animatorBounce.setRepeatCount(3);
@@ -515,7 +515,7 @@ public class SwipeRevealLayout extends ViewGroup {
      * @param duration the duration of the animation (repeated 3 times)
      * @param interpolator the interpolator to set to the bounce animation
      */
-    public void bounceFromLeft(int percentage, int duration, Interpolator interpolator) {
+    private void bounceFromLeft(int percentage, int duration, Interpolator interpolator) {
         ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "x", 0, ((Math.abs(mRectMainOpen.width()) / 100) * percentage))
                 .setDuration(duration);
         animatorBounce.setRepeatCount(3);
@@ -530,7 +530,7 @@ public class SwipeRevealLayout extends ViewGroup {
      * @param duration the duration of the animation (repeated 3 times)
      * @param interpolator the interpolator to set to the bounce animation
      */
-    public void bounceFromTop(int percentage, int duration, Interpolator interpolator) {
+    private void bounceFromTop(int percentage, int duration, Interpolator interpolator) {
         ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "y", 0, - ((Math.abs(mRectMainOpen.height()) / 100) * percentage))
                 .setDuration(duration);
         animatorBounce.setRepeatCount(3);
@@ -545,13 +545,32 @@ public class SwipeRevealLayout extends ViewGroup {
      * @param duration the duration of the animation (repeated 3 times)
      * @param interpolator the interpolator to set to the bounce animation
      */
-    public void bounceFromBottom(int percentage, int duration, Interpolator interpolator) {
+    private void bounceFromBottom(int percentage, int duration, Interpolator interpolator) {
         ObjectAnimator animatorBounce = ObjectAnimator.ofFloat(mMainView, "y", 0, ((Math.abs(mRectMainOpen.height()) / 100) * percentage))
                 .setDuration(duration);
         animatorBounce.setRepeatCount(3);
         animatorBounce.setRepeatMode(ValueAnimator.REVERSE);
         animatorBounce.setInterpolator(interpolator);
         animatorBounce.start();
+    }
+
+    public void bounce(int percentage, int duration, Interpolator interpolator) {
+        if (mState == STATE_CLOSE) {
+            switch (mDragEdge) {
+                case DRAG_EDGE_BOTTOM:
+                    bounceFromTop(percentage, duration, interpolator);
+                    break;
+                case DRAG_EDGE_LEFT:
+                    bounceFromLeft(percentage, duration, interpolator);
+                    break;
+                case DRAG_EDGE_RIGHT:
+                    bounceFromRight(percentage, duration, interpolator);
+                    break;
+                case DRAG_EDGE_TOP:
+                    bounceFromBottom(percentage, duration, interpolator);
+                    break;
+            }
+        }
     }
 
     /**
