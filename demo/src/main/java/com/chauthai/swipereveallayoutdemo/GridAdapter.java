@@ -2,11 +2,13 @@ package com.chauthai.swipereveallayoutdemo;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
@@ -37,9 +39,10 @@ public class GridAdapter extends ArrayAdapter<String> {
             convertView = mInflater.inflate(R.layout.grid_item, parent, false);
 
             holder = new ViewHolder();
-            holder.textView = (TextView) convertView.findViewById(R.id.text);
-            holder.deleteView = convertView.findViewById(R.id.delete_layout);
             holder.swipeLayout = (SwipeRevealLayout) convertView.findViewById(R.id.swipe_layout);
+            holder.frontView = convertView.findViewById(R.id.front_layout);
+            holder.deleteView = convertView.findViewById(R.id.delete_layout);
+            holder.textView = (TextView) convertView.findViewById(R.id.text);
 
             convertView.setTag(holder);
         } else {
@@ -55,6 +58,14 @@ public class GridAdapter extends ArrayAdapter<String> {
                 @Override
                 public void onClick(View v) {
                     remove(item);
+                }
+            });
+            holder.frontView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String displayText = "" + item + " clicked";
+                    Toast.makeText(getContext(), displayText, Toast.LENGTH_SHORT).show();
+                    Log.d("GridAdapter", displayText);
                 }
             });
         }
@@ -79,8 +90,9 @@ public class GridAdapter extends ArrayAdapter<String> {
     }
 
     private class ViewHolder {
-        TextView textView;
-        View deleteView;
         SwipeRevealLayout swipeLayout;
+        View frontView;
+        View deleteView;
+        TextView textView;
     }
 }
