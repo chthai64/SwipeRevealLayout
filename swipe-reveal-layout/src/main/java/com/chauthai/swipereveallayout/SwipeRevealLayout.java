@@ -39,7 +39,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 @SuppressLint("RtlHardcoded")
 public class SwipeRevealLayout extends ViewGroup {
@@ -118,6 +117,10 @@ public class SwipeRevealLayout extends ViewGroup {
 
     private int mDragEdge = DRAG_EDGE_LEFT;
 
+    private float mDragDist = 0;
+    private float mPrevX = -1;
+    private float mPrevY = -1;
+
     private ViewDragHelper mDragHelper;
     private GestureDetectorCompat mGestureDetector;
 
@@ -189,14 +192,25 @@ public class SwipeRevealLayout extends ViewGroup {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (isDragLocked()) {
+            return super.onInterceptTouchEvent(ev);
+        }
+
         mDragHelper.processTouchEvent(ev);
         mGestureDetector.onTouchEvent(ev);
+        accumulateDragDist(ev);
 
+        boolean couldBecomeClick = couldBecomeClick(ev);
         boolean settling = mDragHelper.getViewDragState() == ViewDragHelper.STATE_SETTLING;
         boolean idleAfterScrolled = mDragHelper.getViewDragState() == ViewDragHelper.STATE_IDLE
                 && mIsScrolling;
 
-        return settling || idleAfterScrolled;
+        // must be placed as the last statement
+        mPrevX = ev.getX();
+        mPrevY = ev.getY();
+
+        // return true => intercept, cannot trigger onClick event
+        return !couldBecomeClick && (settling || idleAfterScrolled);
     }
 
     @Override
@@ -682,6 +696,45 @@ public class SwipeRevealLayout extends ViewGroup {
                 getSecOpenLeft() + mSecondaryView.getWidth(),
                 getSecOpenTop() + mSecondaryView.getHeight()
         );
+    }
+
+    private boolean couldBecomeClick(MotionEvent ev) {
+        return isInMainView(ev) && !shouldInitiateADrag();
+    }
+
+    private boolean isInMainView(MotionEvent ev) {
+        float x = ev.getX();
+        float y = ev.getY();
+
+        boolean withinVertical = mMainView.getTop() <= y && y <= mMainView.getBottom();
+        boolean withinHorizontal = mMainView.getLeft() <= x && x <= mMainView.getRight();
+
+        return withinVertical && withinHorizontal;
+    }
+
+    private boolean shouldInitiateADrag() {
+        float minDistToInitiateDrag = mDragHelper.getTouchSlop();
+        return mDragDist >= minDistToInitiateDrag;
+    }
+
+    private void accumulateDragDist(MotionEvent ev) {
+        final int action = ev.getAction();
+        if (action == MotionEvent.ACTION_DOWN) {
+            mDragDist = 0;
+            return;
+        }
+
+        boolean dragHorizontally = getDragEdge() == DRAG_EDGE_LEFT ||
+                getDragEdge() == DRAG_EDGE_RIGHT;
+
+        float dragged;
+        if (dragHorizontally) {
+            dragged = Math.abs(ev.getX() - mPrevX);
+        } else {
+            dragged = Math.abs(ev.getY() - mPrevY);
+        }
+
+        mDragDist += dragged;
     }
 
     private void init(Context context, AttributeSet attrs) {
