@@ -40,6 +40,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import static android.content.res.Configuration.SCREENLAYOUT_LAYOUTDIR_MASK;
+import static android.content.res.Configuration.SCREENLAYOUT_LAYOUTDIR_RTL;
+
 @SuppressLint("RtlHardcoded")
 public class SwipeRevealLayout extends ViewGroup {
     // These states are used only for ViewBindHelper
@@ -56,6 +59,8 @@ public class SwipeRevealLayout extends ViewGroup {
     public static final int DRAG_EDGE_RIGHT =  0x1 << 1;
     public static final int DRAG_EDGE_TOP =    0x1 << 2;
     public static final int DRAG_EDGE_BOTTOM = 0x1 << 3;
+    public static final int DRAG_EDGE_START = 0x1 << 4;
+    public static final int DRAG_EDGE_END = 0x1 << 5;
 
     /**
      * The secondary view will be under the main view.
@@ -532,7 +537,17 @@ public class SwipeRevealLayout extends ViewGroup {
      *                 </ul>
      */
     public void setDragEdge(int dragEdge) {
-        mDragEdge = dragEdge;
+        switch (dragEdge){
+            case DRAG_EDGE_START:
+                mDragEdge = isRTL() ? DRAG_EDGE_RIGHT : DRAG_EDGE_LEFT;
+                break;
+            case DRAG_EDGE_END:
+                mDragEdge = isRTL() ? DRAG_EDGE_LEFT : DRAG_EDGE_RIGHT;
+                break;
+            default:
+                mDragEdge = dragEdge;
+                break;
+        }
     }
 
     /**
@@ -745,7 +760,7 @@ public class SwipeRevealLayout extends ViewGroup {
                     0, 0
             );
 
-            mDragEdge = a.getInteger(R.styleable.SwipeRevealLayout_dragEdge, DRAG_EDGE_LEFT);
+            setDragEdge(a.getInteger(R.styleable.SwipeRevealLayout_dragEdge, DRAG_EDGE_LEFT));
             mMinFlingVelocity = a.getInteger(R.styleable.SwipeRevealLayout_flingVelocity, DEFAULT_MIN_FLING_VELOCITY);
             mMode = a.getInteger(R.styleable.SwipeRevealLayout_mode, MODE_NORMAL);
 
@@ -1120,5 +1135,9 @@ public class SwipeRevealLayout extends ViewGroup {
         Resources resources = getContext().getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return (int) (dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
+    private boolean isRTL(){
+        return (getResources().getConfiguration().screenLayout & SCREENLAYOUT_LAYOUTDIR_MASK) == SCREENLAYOUT_LAYOUTDIR_RTL;
     }
 }

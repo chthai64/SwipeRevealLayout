@@ -17,7 +17,7 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:titleTextColor="@android:color/white"/>
 
-        <com.chauthai.swipereveallayout.SwipeRevealLayout
+    <com.chauthai.swipereveallayout.SwipeRevealLayout
             android:id="@+id/swipe_layout_1"
             android:layout_width="match_parent"
             android:layout_height="70dp"
@@ -64,7 +64,6 @@
                     android:layout_gravity="center"/>
             </FrameLayout>
         </com.chauthai.swipereveallayout.SwipeRevealLayout>
-
 
     <com.chauthai.swipereveallayout.SwipeRevealLayout
         android:id="@+id/swipe_layout_2"
@@ -190,4 +189,120 @@
                 android:layout_gravity="center"/>
         </FrameLayout>
     </com.chauthai.swipereveallayout.SwipeRevealLayout>
+
+    <com.chauthai.swipereveallayout.SwipeRevealLayout
+        android:id="@+id/swipe_layout_5"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_margin="10dp"
+
+        app:mode="normal"
+        app:dragEdge="end">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/white"
+                android:text="More"
+                android:onClick="moreOnClick"/>
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@android:color/holo_red_dark"
+                android:textColor="@android:color/white"
+                android:text="Delete"
+                android:onClick="deleteOnClick"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/border_solid_white"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:onClick="layoutOneOnClick">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Awesome Layout 5"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="drag edege is set according ot layout direction"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+    </com.chauthai.swipereveallayout.SwipeRevealLayout>
+
+    <com.chauthai.swipereveallayout.SwipeRevealLayout
+        android:id="@+id/swipe_layout_6"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_margin="10dp"
+        android:background="@android:color/darker_gray"
+
+        app:mode="same_level"
+        app:dragEdge="start">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@android:color/holo_green_dark"
+                android:textColor="@android:color/white"
+                android:text="Archive"
+                android:onClick="archiveOnClick"/>
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@android:color/holo_blue_light"
+                android:textColor="@android:color/white"
+                android:text="Help"
+                android:onClick="helpOnClick"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/border_solid_white"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:onClick="layoutOneOnClick">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Awesome Layout 6"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="drag edege is set according ot layout direction"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+    </com.chauthai.swipereveallayout.SwipeRevealLayout>
+
 </LinearLayout>
