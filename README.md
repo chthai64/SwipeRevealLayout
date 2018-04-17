@@ -26,7 +26,7 @@ Drag mode same_level:
 #### Dependencies
 ```groovy
 dependencies {
-    compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.0'
+    compile 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
 }
 ```
 

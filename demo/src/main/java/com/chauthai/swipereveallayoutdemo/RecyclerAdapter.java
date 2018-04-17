@@ -3,10 +3,12 @@ package com.chauthai.swipereveallayoutdemo;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
@@ -20,10 +22,12 @@ import java.util.List;
 public class RecyclerAdapter extends RecyclerView.Adapter {
     private List<String> mDataSet = new ArrayList<>();
     private LayoutInflater mInflater;
+    private Context mContext;
     private final ViewBinderHelper binderHelper = new ViewBinderHelper();
 
 
     public RecyclerAdapter(Context context, List<String> dataSet) {
+        mContext = context;
         mDataSet = dataSet;
         mInflater = LayoutInflater.from(context);
 
@@ -78,17 +82,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
 
     private class ViewHolder extends RecyclerView.ViewHolder {
         private SwipeRevealLayout swipeLayout;
+        private View frontLayout;
         private View deleteLayout;
         private TextView textView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             swipeLayout = (SwipeRevealLayout) itemView.findViewById(R.id.swipe_layout);
+            frontLayout = itemView.findViewById(R.id.front_layout);
             deleteLayout = itemView.findViewById(R.id.delete_layout);
             textView = (TextView) itemView.findViewById(R.id.text);
         }
 
-        public void bind(String data) {
+        public void bind(final String data) {
             deleteLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -98,6 +104,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
             });
 
             textView.setText(data);
+
+            frontLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String displayText = "" + data + " clicked";
+                    Toast.makeText(mContext, displayText, Toast.LENGTH_SHORT).show();
+                    Log.d("RecyclerAdapter", displayText);
+                }
+            });
         }
     }
 }
