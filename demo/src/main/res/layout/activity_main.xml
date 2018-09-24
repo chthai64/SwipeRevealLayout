@@ -23,7 +23,7 @@
             android:layout_height="70dp"
             android:layout_margin="10dp"
 
-            app:mode="normal"
+            app:revealMode="normal"
             app:dragEdge="right">
 
             <LinearLayout
@@ -73,7 +73,7 @@
         android:layout_margin="10dp"
         android:background="@android:color/darker_gray"
 
-        app:mode="same_level"
+        app:revealMode="same_level"
         app:dragEdge="left">
 
         <LinearLayout
@@ -122,7 +122,7 @@
         android:layout_margin="10dp"
         android:background="@android:color/darker_gray"
 
-        app:mode="same_level"
+        app:revealMode="same_level"
         app:dragEdge="top">
 
         <FrameLayout
@@ -160,7 +160,7 @@
         android:layout_margin="10dp"
         android:background="@android:color/darker_gray"
 
-        app:mode="same_level"
+        app:revealMode="same_level"
         app:dragEdge="bottom">
 
         <FrameLayout

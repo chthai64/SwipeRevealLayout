@@ -747,7 +747,7 @@ public class SwipeRevealLayout extends ViewGroup {
 
             mDragEdge = a.getInteger(R.styleable.SwipeRevealLayout_dragEdge, DRAG_EDGE_LEFT);
             mMinFlingVelocity = a.getInteger(R.styleable.SwipeRevealLayout_flingVelocity, DEFAULT_MIN_FLING_VELOCITY);
-            mMode = a.getInteger(R.styleable.SwipeRevealLayout_mode, MODE_NORMAL);
+            mMode = a.getInteger(R.styleable.SwipeRevealLayout_revealMode, MODE_NORMAL);
 
             mMinDistRequestDisallowParent = a.getDimensionPixelSize(
                     R.styleable.SwipeRevealLayout_minDistRequestDisallowParent,
