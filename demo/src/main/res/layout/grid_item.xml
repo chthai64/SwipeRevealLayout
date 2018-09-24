@@ -7,7 +7,7 @@
     android:layout_height="150dp"
     android:padding="10dp"
     app:dragEdge="right"
-    app:mode="same_level">
+    app:revealMode="same_level">
 
     <FrameLayout
         android:id="@+id/delete_layout"

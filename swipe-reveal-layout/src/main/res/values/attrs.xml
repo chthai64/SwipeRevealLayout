@@ -9,7 +9,7 @@
             <flag name="bottom" value="8" />
         </attr>
         
-        <attr name="mode">
+        <attr name="revealMode">
             <enum name="normal" value="0" />
             <enum name="same_level"   value="1" />
         </attr>
